@@ -7,8 +7,6 @@ class BottomNavigationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-    );
+    return Scaffold();
   }
 }
