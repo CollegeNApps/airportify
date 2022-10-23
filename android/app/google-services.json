@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "191042664285",
+    "project_id": "airportify-26d93",
+    "storage_bucket": "airportify-26d93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191042664285:android:91ac2e78c3e7ee477d5ab4",
+        "android_client_info": {
+          "package_name": "com.collegeapps.airportify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "191042664285-0t3un43jna51g99ga1c0jniu2em7t3oq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.collegeapps.airportify",
+            "certificate_hash": "8a491adc711a3b3b3e66511acafcf0a2f4907543"
+          }
+        },
+        {
+          "client_id": "191042664285-6onoebujaaup39nldj76vl177lapjn8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvhRGU21SXabhXbEbGBRDM-EmnnKEKaoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "191042664285-6onoebujaaup39nldj76vl177lapjn8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
