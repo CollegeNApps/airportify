@@ -73,16 +73,17 @@ class FlightInfoScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      buildJourneyCard(
-                          w, h, context, 'images/arrival.jpg', 'Arrival'),
-                      buildJourneyCard(
-                          w, h, context, 'images/transit.jpg', 'Transit'),
-                      buildJourneyCard(
-                          w, h, context, 'images/departure.jpg', 'Departure'),
-                    ],
+                  GetX<FirebaseController>(
+                    builder: (ctrl1) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          buildJourneyCard(w, h, context, 'images/arrival.jpg', 'Arrival',1,ctrl1),
+                          buildJourneyCard(w, h, context, 'images/transit.jpg', 'Transit',2,ctrl1),
+                          buildJourneyCard(w, h, context, 'images/departure.jpg', 'Departure',3,ctrl1),
+                        ],
+                      );
+                    }
                   ),
 
                   const SizedBox(
@@ -98,14 +99,16 @@ class FlightInfoScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      buildServiceCard(
-                          w, h, context, 'images/buggy.png', 'Book a buggy'),
-                      buildServiceCard(
-                          w, h, context, 'images/porter.png', 'Book a porter'),
-                    ],
+                  GetX<FirebaseController>(
+                    builder: (ctrl2) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          buildServiceCard(w, h, context, 'images/buggy2.jpg', 'Book a buggy',1,ctrl2),
+                          buildServiceCard(w, h, context, 'images/porter2.jpg', 'Book a porter',2,ctrl2),
+                        ],
+                      );
+                    }
                   ),
 
                   const SizedBox(
@@ -120,84 +123,94 @@ class FlightInfoScreen extends StatelessWidget {
     );
   }
 
-  Container buildJourneyCard(double w, double h, BuildContext context, String image, String text) {
-    return Container(
-      width: w * 0.28,
-      height: h * 0.21,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Column(
-        children: [
-          Container(
-            height: h * 0.16,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                    image: AssetImage(image), fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(10)),
-          ),
-          const Spacer(),
-          Container(
-            height: h * 0.03,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(5)),
-            child: Center(
-              child: Text(
-                text,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-              ),
+  InkWell buildJourneyCard(double w, double h, BuildContext context, String image, String text,int option,FirebaseController ctrl) {
+    return InkWell(
+      onTap: (){
+        ctrl.journeyType.value = option;
+      },
+      child: Container(
+        width: w * 0.28,
+        height: h * 0.21,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: h * 0.16,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                      image: AssetImage(image), fit: BoxFit.cover,opacity:ctrl.journeyType.value==option?1:0.5),
+                  borderRadius: BorderRadius.circular(10)),
             ),
-          )
-        ],
+            const Spacer(),
+            Container(
+              height: h * 0.03,
+              decoration: BoxDecoration(
+                  color:ctrl.journeyType.value==option? Theme.of(context).primaryColor:Colors.grey,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Center(
+                child: Text(
+                  text,
+                  style:
+                      const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Container buildServiceCard(double w, double h, BuildContext context, String image, String text) {
-    return Container(
-      width: w * 0.42,
-      height: h * 0.22,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                offset: const Offset(0, 2),
-                blurRadius: 2,
-                spreadRadius: 0)
-          ]),
-      child: Column(
-        children: [
-          Container(
-            height: h * 0.16,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                    image: AssetImage(image), fit: BoxFit.contain),
-                borderRadius: BorderRadius.circular(10)),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            width: w * 0.35,
-            height: h * 0.03,
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(5)),
-            child: Center(
-              child: Text(
-                text,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-              ),
+  InkWell buildServiceCard(double w, double h, BuildContext context, String image, String text, int option,FirebaseController ctrl) {
+    return InkWell(
+      onTap: (){
+        ctrl.serviceType.value = option;
+      },
+      child: Container(
+        width: w * 0.42,
+        height: h * 0.22,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  offset: const Offset(0, 2),
+                  blurRadius: 2,
+                  spreadRadius: 0)
+            ]),
+        child: Column(
+          children: [
+            Container(
+              height: h * 0.16,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                      image: AssetImage(image), fit: BoxFit.contain,opacity:ctrl.serviceType.value==option?1:0.5),
+                  borderRadius: BorderRadius.circular(10)),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 5,
+            ),
+            Container(
+              width: w * 0.35,
+              height: h * 0.03,
+              decoration: BoxDecoration(
+                  color: ctrl.serviceType.value==option?Theme.of(context).primaryColor:Colors.grey,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Center(
+                child: Text(
+                  text,
+                  style:
+                      const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

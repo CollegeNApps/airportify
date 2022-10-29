@@ -12,6 +12,9 @@ class FirebaseController extends GetxController{
   final _flights = [FlightInfo()].obs;
   List<FlightInfo> get flights => _flights.value;
 
+  RxInt journeyType = 0.obs;
+  RxInt serviceType = 0.obs;
+
   final flightStatusCodeColors =  const[
     Color(0xff7ad95b),
     Color(0xffffbb3e),

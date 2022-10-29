@@ -45,7 +45,8 @@ class FlightInfo {
       status: d['status'],
       statusCode: d['statusCode'],
       to: d['to'],
-      image: d['image']
+      image: d['image'],
+      capacity: d['capacity']
     );
   }
 

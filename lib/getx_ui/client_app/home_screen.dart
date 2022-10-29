@@ -89,9 +89,9 @@ class HomeScreen extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   FlightInfo flight = ctrl.flights[index];
-
+                                  print("FLight status : ${flight.status}");
                                   return Padding(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
                                     child: InkWell(
                                       onTap: (){
                                         Get.to(()=> FlightInfoScreen(index: index,));
@@ -114,6 +114,7 @@ class HomeScreen extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(3),
                                           child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Hero(
                                                 tag: 'flightImage$index',
@@ -133,42 +134,46 @@ class HomeScreen extends StatelessWidget {
                                                     fontSize: 15
                                                   ),),
                                                   const SizedBox(height: 5,),
-                                                  Row(
-                                                    children: [
-                                                      Text("Arrival Time : ${flight.at}",style: textTheme.headline1!.copyWith(
+                                                  Text("Arrival Time : ${flight.at}",style: textTheme.headline1!.copyWith(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.normal
+                                                  ),),
+                                                  // SizedBox(width: w*0.08,),
+                                                  const SizedBox(height: 5,),
+                                                  Text("From : ${flight.from}",style: textTheme.headline1!.copyWith(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.normal
+                                                  ),),
+
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 5),
+                                                child: Column(
+                                                  children: [
+                                                    Text('', style: textTheme.headline1!.copyWith(
+                                                        fontSize: 15
+                                                    ),),
+                                                    const SizedBox(height: 5,),
+                                                    Text("Airline : ${flight.airline}",style: textTheme.headline1!.copyWith(
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.normal
-                                                      ),),
-                                                      SizedBox(width: w*0.08,),
-                                                      Text("Airline : ${flight.airline}",style: textTheme.headline1!.copyWith(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.normal
-                                                      ),),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 5,),
-                                                  Row(
+                                                    ),),
+                                                    const SizedBox(height: 5,),
 
-                                                    children: [
-                                                      Text("From : ${flight.from}",style: textTheme.headline1!.copyWith(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.normal
-                                                      ),),
-                                                      SizedBox(width: w*0.03,),
-                                                      Container(
-                                                        width: w*0.23,
-                                                        height: 20,
-                                                        decoration: BoxDecoration(
+                                                    Container(
+                                                      width: w*0.23,
+                                                      height: 20,
+                                                      decoration: BoxDecoration(
                                                           color: ctrl.flightStatusCodeColors[flight.statusCode!.toInt()-1],
                                                           borderRadius: BorderRadius.circular(4)
-                                                        ),
-                                                        child: Center(child: Text("${flight.status}",style: textTheme.headline1!.copyWith(
+                                                      ),
+                                                      child: Center(child: Text("${flight.status}",style: textTheme.headline1!.copyWith(
                                                           fontSize: 12
-                                                        ),),),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
+                                                      ),),),
+                                                    )
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           ),

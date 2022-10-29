@@ -1,6 +1,7 @@
 
 
 import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,9 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     final h = MediaQuery.of(context).size.height;
     final FlightInfo flight = widget.flight;
 
+    String serviceImage = fb.serviceType.value==1?'images/buggy2.jpg':'images/porter2.jpg';
+    String buggyOrPoter = fb.serviceType.value==1?'buggy':'porter';
+
     return Scaffold(
 
       bottomNavigationBar: InkWell(
@@ -51,7 +55,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
           ),
-          child: const Center(child: Text('Confirm Booking',style: TextStyle(
+          child: const Center(child: Text('Proceed',style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500
           ),),),
@@ -75,14 +79,15 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                 children: [
                   SizedBox(
                     height: h * 0.35,
-                    child: Image.asset('images/buggy.png',fit: BoxFit.scaleDown,),
+                    width: w,
+                    child: Image.asset(serviceImage,fit: BoxFit.contain,),
                   ),
                   Text("Good news",style: textTheme.headline1!.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 18
                   ),),
                   const SizedBox(height: 5,),
-                  Text('There are 5 buggy services avaialble nearby',style: textTheme.headline1!.copyWith(
+                  Text('There are 5 $buggyOrPoter services avaialble nearby',style: textTheme.headline1!.copyWith(
                     fontSize: 14
                   ),),
                   const SizedBox(height: 10,),
