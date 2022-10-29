@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/auth_controller.dart';
-import 'bottom_nav_screen.dart';
+import 'client_app/home_screen.dart';
 
 class PhoneLoginScreen extends StatelessWidget {
   PhoneLoginScreen({Key? key}) : super(key: key);
@@ -50,7 +50,10 @@ class PhoneLoginScreen extends StatelessWidget {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(height: h*0.4,),
+                            Lottie.asset(
+                              'images/lottie/105173-verification-code-otp.json',
+                              fit: BoxFit.contain,
+                            ),
                             Center(
                               child: Container(
                                 width: w*0.9,
@@ -75,12 +78,12 @@ class PhoneLoginScreen extends StatelessWidget {
                                       Text("Hi",style: GoogleFonts.roboto(
                                           fontSize: 17*s,
                                           // color: const Color(0xff909090),
-                                          color: Theme.of(context).scaffoldBackgroundColor,
+                                          color: Theme.of(context).canvasColor,
                                           fontWeight: FontWeight.bold
                                       ),),
-                                      Text("Let's get you acquainted",style:GoogleFonts.roboto(
+                                      Text("Let's get you logged in",style:GoogleFonts.roboto(
                                         fontSize: 19*s,
-                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        color: Theme.of(context).canvasColor,
                                         fontWeight: FontWeight.bold,
                                       ) ,),
                                       SizedBox(height: h*0.02,),
@@ -190,7 +193,7 @@ class PhoneLoginScreen extends StatelessWidget {
                                               print("phone no :${_phoneNoController.text}]\nPassword :${_passwordController.text}");
                                               if(_phoneNoController.text=='1234567890' && _passwordController.text == '12345'){
                                                 await FirebaseAuth.instance.signInAnonymously();
-                                                Get.to(()=>BottomNavigationScreen());
+                                                Get.to(()=>HomeScreen());
                                               }else{
                                                 Get.offAll(()=> OTPScreen(phoneNumber: _phoneNoController.text,));
 
@@ -212,7 +215,7 @@ class PhoneLoginScreen extends StatelessWidget {
                                                   )
                                                 ]
                                             ),
-                                            child: Center(child: Text("Sign up ",style:TextStyle(
+                                            child: Center(child: Text("Get OTP",style:TextStyle(
                                                 fontSize: 16*s,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold

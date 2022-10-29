@@ -6,7 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import '../getx_ui/bottom_nav_screen.dart';
+import '../getx_ui/client_app/home_screen.dart';
 import '../getx_ui/phone_login_screen.dart';
 
 class AuthController extends GetxController{
@@ -54,7 +54,7 @@ class AuthController extends GetxController{
       Get.offAll(()=>PhoneLoginScreen());
     }else{
       print("Go to home page");
-      Get.off(()=>BottomNavigationScreen());
+      Get.off(()=>HomeScreen());
     }
   }
 
