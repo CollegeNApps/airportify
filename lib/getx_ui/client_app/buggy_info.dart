@@ -1,9 +1,11 @@
 
 
 import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -49,6 +51,21 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     return Scaffold(
 
       bottomNavigationBar: InkWell(
+        onTap: (){
+          if(dateTimeController.text.isNotEmpty && adultController.text.isNotEmpty && kidsController.text.isNotEmpty && carryBagController.text.isNotEmpty && suitcaseController.text.isNotEmpty){
+            openModalBottomSheet(context,w,h,);
+          }else{
+            Fluttertoast.showToast(
+              msg: 'Please enter all the fields',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16.0
+            );
+          }
+        },
         child: Container(
           width: w,
           height: h*0.06,
@@ -477,23 +494,6 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
         initialDate: DateTime.now(),
         firstDate: DateTime.now(),
         lastDate: DateTime(DateTime.now().year + 1),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: Colors.yellow, // header background color
-                onPrimary: Colors.black, // header text color
-                onSurface: Colors.black, // body text color
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: Colors.black, // button text color
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        },
     );
   }
 
@@ -530,6 +530,181 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
       dateTimeController.text = " $date  @$time";
       dateTimeNode.unfocus();
     }
+  }
+
+  openModalBottomSheet(BuildContext context,double w,double h) {
+
+    String serviceType = '';
+    String journeyType = '';
+
+    if(fb.serviceType.value==1){
+      serviceType = 'Buggy';
+    }else{
+      serviceType = 'Porter';
+    }
+
+    if(fb.journeyType.value==1){
+      journeyType = 'Arrival';
+    }else if(fb.journeyType.value==2){
+      journeyType ='Transit';
+    }else{
+      journeyType = 'Departure';
+    }
+
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (BuildContext context) {
+        var t1 = Theme.of(context).textTheme.headline1;
+        var t2 = const TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 16
+        );
+        return Container(
+          width: w,
+          height: h*0.7,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Booking Confirmation",style: t1!.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),),
+                const SizedBox(height: 15,),
+                Row(
+                  children: [
+                    Text("Service Type  : ",style:t2),
+                    Container(
+                      width: w*0.23,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(4)
+                      ),
+                      child: Center(child: Text(serviceType,style: t2.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14
+                      ),),),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Row(
+                  children: [
+                    Text("Journey Type : ",style:t2),
+                    Container(
+                      width: w*0.23,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(4)
+                      ),
+                      child: Center(child: Text(journeyType,style: t2.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14
+                      ),),),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Text("Location : ${widget.flight.to}",style: t2),
+                const SizedBox(height: 10,),
+                SizedBox(
+                  width: w*0.8,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Date : $date",style: t2,),
+                          const SizedBox(height: 5,),
+                          Text("No of adults : ${adultController.text}",style: t2,)
+                        ],
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Time : $time",style: t2,),
+                          const SizedBox(height: 5,),
+                          Text("No of kids : ${kidsController.text}",style: t2,)
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10,),
+                Text("No of carry bags : ${carryBagController.text}",style: t2,),
+                const SizedBox(height: 10,),
+                Text("No of suitcases/kitbags : ${suitcaseController.text}",style: t2,),
+                const SizedBox(height: 10,),
+                Divider(thickness: 2, color: Colors.grey.withOpacity(0.4),),
+
+                const SizedBox(height: 10,),
+                Text("Pricing Details",style: t2,),
+                const SizedBox(height: 10,),
+
+                buildPriceRow('SubTotal','Rs 300'),
+                const SizedBox(height: 5,),
+                buildPriceRow('Service Charges', 'Rs 30'),
+                const SizedBox(height: 5,),
+                buildPriceRow('Overall Total', 'Rs 330'),
+
+                const Spacer(),
+                Center(
+                  child: InkWell(
+                    onTap: (){
+                      Get.to(()=> const ConfirmationScreen());
+                    },
+                    child: Container(
+                      width: w,
+                      height: 35,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            offset: const Offset(0,2),
+                            blurRadius: 2,
+                            spreadRadius: 0
+                          )
+                        ]
+                      ),
+                      child: Center(child: Text("Confirm Booking",style: t2.copyWith(
+                        fontWeight: FontWeight.bold
+                      ),),),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+  }
+
+  Row buildPriceRow(String heading, String price) {
+    return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children:  [
+                  Text(heading,style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15
+                  ),),
+                  Text(price,style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15
+                  ))
+                ],
+              );
   }
 
 }

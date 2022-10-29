@@ -1,6 +1,7 @@
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/models/flight_info.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'buggy_info.dart';
@@ -23,7 +24,20 @@ class FlightInfoScreen extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: InkWell(
         onTap: () {
-          Get.to(() => BuggyInfoScreen(flight: flight,));
+          if(fb.serviceType.value!=0 && fb.journeyType.value !=0){
+            Get.to(() => BuggyInfoScreen(flight: flight,));
+          }else{
+            Fluttertoast.showToast(
+              msg: 'Please select journey and service type',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.SNACKBAR,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16.0
+            );
+          }
+
         },
         child: Container(
           width: w,
