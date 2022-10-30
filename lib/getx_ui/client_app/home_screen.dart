@@ -1,3 +1,4 @@
+import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/flight_info.dart';
 import 'package:airportify/models/flight_info.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    final user = AuthController.firebaseUser;
 
     return Scaffold(
       body: NestedScrollView(
@@ -26,18 +28,16 @@ class HomeScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               floating: true,
               title: Text(
-                "Hi username",
+                "Hi ${user.username}",
                 style: textTheme.headline1!.copyWith(color: Colors.black,fontWeight: FontWeight.w500),
               ),
               actions: [
                 IconButton(
                     onPressed: () => null,
-                    icon: const Icon(Icons.notifications_outlined,
-                        color: Colors.black)),
+                    icon: const Icon(Icons.notifications_outlined, color: Colors.black)),
                 IconButton(
                     onPressed: () => null,
-                    icon:
-                    const Icon(Icons.account_circle, color: Colors.black)),
+                    icon: const Icon(Icons.account_circle, color: Colors.black)),
               ],
             ),
             SliverToBoxAdapter(
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   FlightInfo flight = ctrl.flights[index];
-                                  print("FLight status : ${flight.status}");
+
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 4),
                                     child: InkWell(

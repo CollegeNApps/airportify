@@ -2,7 +2,6 @@
 
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,24 +45,40 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     final FlightInfo flight = widget.flight;
 
     String serviceImage = fb.serviceType.value==1?'images/buggy2.jpg':'images/porter2.jpg';
-    String buggyOrPoter = fb.serviceType.value==1?'buggy':'porter';
+    String buggyOrPorter = fb.serviceType.value==1?'buggy':'porter';
 
     return Scaffold(
 
       bottomNavigationBar: InkWell(
         onTap: (){
-          if(dateTimeController.text.isNotEmpty && adultController.text.isNotEmpty && kidsController.text.isNotEmpty && carryBagController.text.isNotEmpty && suitcaseController.text.isNotEmpty){
-            openModalBottomSheet(context,w,h,);
+          if(buggyOrPorter=='buggy'){
+            if(dateTimeController.text.isNotEmpty && adultController.text.isNotEmpty && kidsController.text.isNotEmpty ){
+              openModalBottomSheet(context,w,h,);
           }else{
-            Fluttertoast.showToast(
-              msg: 'Please enter all the fields',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.SNACKBAR,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16.0
-            );
+              Fluttertoast.showToast(
+                  msg: 'Please enter all the fields',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.SNACKBAR,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
+          }else{
+            if(dateTimeController.text.isNotEmpty && carryBagController.text.isNotEmpty && suitcaseController.text.isNotEmpty){
+              openModalBottomSheet(context,w,h,);
+            }else{
+              Fluttertoast.showToast(
+                  msg: 'Please enter all the fields',
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.SNACKBAR,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+            }
           }
         },
         child: Container(
@@ -104,14 +119,14 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                     fontSize: 18
                   ),),
                   const SizedBox(height: 5,),
-                  Text('There are 5 $buggyOrPoter services avaialble nearby',style: textTheme.headline1!.copyWith(
+                  Text('There are 5 $buggyOrPorter services avaialble nearby',style: textTheme.headline1!.copyWith(
                     fontSize: 14
                   ),),
                   const SizedBox(height: 10,),
 
                   Container(
                     width: w,
-                    height: h*0.3,
+                    // height: h*0.3,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -125,7 +140,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                       borderRadius: BorderRadius.circular(10)
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -164,7 +179,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                           ),
 
                           const SizedBox(height: 10,),
-                          Row(
+                          buggyOrPorter=='buggy'?Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Column(
@@ -244,10 +259,10 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                                 ],
                               )
                             ],
-                          ),
+                          ):Row(),
 
                           const SizedBox(height: 10,),
-                          Row(
+                          buggyOrPorter=='porter'?Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Column(
@@ -327,7 +342,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                                 ],
                               )
                             ],
-                          )
+                          ):Row()
 
                         ],
                       ),
@@ -620,42 +635,54 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Date : $date",style: t2,),
-                          const SizedBox(height: 5,),
-                          Text("No of adults : ${adultController.text}",style: t2,)
-                        ],
-                      ),
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Time : $time",style: t2,),
-                          const SizedBox(height: 5,),
-                          Text("No of kids : ${kidsController.text}",style: t2,)
-                        ],
-                      ),
+                      Text("Date : $date",style: t2,),
+                      Text("Time : $time",style: t2,),
                     ],
                   ),
                 ),
                 const SizedBox(height: 10,),
-                Text("No of carry bags : ${carryBagController.text}",style: t2,),
-                const SizedBox(height: 10,),
-                Text("No of suitcases/kitbags : ${suitcaseController.text}",style: t2,),
+                serviceType=='Buggy'?Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10,),
+                    Text('$serviceType Details',style: t2.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ),),
+                    const SizedBox(height: 10,),
+                    Text("No of Adults: ${adultController.text}",style: t2,),
+                    const SizedBox(height: 10,),
+                    Text("No of kids : ${kidsController.text}",style: t2,),
+
+                  ],
+                ):Row(),
+
+                serviceType=='Porter'?Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10,),
+                    Text('$serviceType Details',style: t2.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                    ),),
+                    const SizedBox(height: 10,),
+                    Text("No of carry bags : ${carryBagController.text}",style: t2,),
+                    const SizedBox(height: 10,),
+                    Text("No of suitcases/kitbags : ${suitcaseController.text}",style: t2,),
+
+                  ],
+                ):Row(),
+
                 const SizedBox(height: 10,),
                 Divider(thickness: 2, color: Colors.grey.withOpacity(0.4),),
-
                 const SizedBox(height: 10,),
-                Text("Pricing Details",style: t2,),
+                Text("Pricing Details",style: t2.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18
+                ),),
                 const SizedBox(height: 10,),
 
-                buildPriceRow('SubTotal','Rs 300'),
-                const SizedBox(height: 5,),
-                buildPriceRow('Service Charges', 'Rs 30'),
-                const SizedBox(height: 5,),
-                buildPriceRow('Overall Total', 'Rs 330'),
+                buildPriceBlock(serviceType),
 
                 const Spacer(),
                 Center(
@@ -705,6 +732,55 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                   ))
                 ],
               );
+  }
+
+  buildPriceBlock(String serviceType) {
+    int pricePerAdult = 50;
+    int pricePerKid = 25;
+    int pricePerCarryBag = 25;
+    int pricePerSuitcase = 50;
+    int serviceCharge = 20;
+
+    if(serviceType=='Buggy'){
+      int subtotal = (pricePerAdult*int.parse(adultController.text)) + (pricePerKid*int.parse(kidsController.text));
+      int overallTotal = subtotal+serviceCharge;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Per Adult : Rs 50 | Per Kid : Rs 25",style:TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 12,
+              color: Colors.grey.withOpacity(0.5)
+          ),),
+          const SizedBox(height: 10,),
+          buildPriceRow('SubTotal','Rs $subtotal'),
+          const SizedBox(height: 5,),
+          buildPriceRow('Service Charges', 'Rs 20'),
+          const SizedBox(height: 5,),
+          buildPriceRow('Overall Total', 'Rs $overallTotal'),
+        ],
+      );
+    }else{
+      int subtotal = (pricePerSuitcase*int.parse(suitcaseController.text)) + (pricePerCarryBag*int.parse(carryBagController.text));
+      int overallTotal = subtotal+serviceCharge;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Per Suitcase : Rs 50 | Per Carrybag  : Rs 25",style:TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 12,
+            color: Colors.grey.withOpacity(0.5)
+          ),),
+          const SizedBox(height: 10,),
+          buildPriceRow('SubTotal','Rs $subtotal'),
+          const SizedBox(height: 5,),
+          buildPriceRow('Service Charges', 'Rs 20'),
+          const SizedBox(height: 5,),
+          buildPriceRow('Overall Total', 'Rs $overallTotal'),
+        ],
+      );
+    }
+
   }
 
 }

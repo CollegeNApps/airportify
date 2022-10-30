@@ -1,5 +1,7 @@
+import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/home_screen.dart';
 import 'package:airportify/getx_ui/phone_login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,6 +23,7 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final AuthController authController = Get.find();
+  final FirebaseController fbController = Get.find();
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinNode = FocusNode();
 
@@ -113,6 +116,8 @@ class _OTPScreenState extends State<OTPScreen> {
                         ///Checking if the user(phoneNumber) already exists
                         ///If yes: Then we direct the user to the home screen
                         ///Else : We proceed to the on boarding section
+                        createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+                        AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
                         Get.to(()=>HomeScreen());
                       }else{
                         Get.to(()=>OnBoardingScreens());
@@ -189,6 +194,7 @@ class _OTPScreenState extends State<OTPScreen> {
         verificationCompleted: (PhoneAuthCredential credentials) async{
           await FirebaseAuth.instance.signInWithCredential(credentials).then((value) async {
             if(value.user!=null){
+              // createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
               Get.to(()=>HomeScreen());
             }else{
               Get.to(()=>OnBoardingScreens());
@@ -217,4 +223,15 @@ class _OTPScreenState extends State<OTPScreen> {
           });
         });
   }
+
+  createUserAccount(String phoneNo,String uid ){
+    print("Entered Creating account function");
+    FirebaseFirestore.instance.collection('users').doc().set({
+      'username':AuthController.username,
+      'phoneNo':phoneNo.substring(3),
+      'uid':uid
+    });
+    print("Created account");
+  }
+
 }

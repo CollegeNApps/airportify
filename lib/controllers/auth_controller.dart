@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/models/user/user_info.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -15,11 +17,15 @@ class AuthController extends GetxController{
   late Rx<User?> _user;
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  static UserDetails firebaseUser = UserDetails();
+
+
   late StreamSubscription subscription;
   var _hasInternet = false.obs;
   bool get hasInternet => _hasInternet.value;
   var signedInBool = true.obs;
   RxBool adminPass = false.obs;
+  static String username = '';
 
   @override
   void onInit() {
@@ -48,12 +54,13 @@ class AuthController extends GetxController{
     subscription.cancel();
   }
 
-  _initializeApp(User? user){
+  _initializeApp(User? user)async{
     if(user==null){
       print("Go to login page");
       Get.offAll(()=>PhoneLoginScreen());
     }else{
       print("Go to home page");
+      firebaseUser = await FirebaseController.fetchUserInfo(user);
       Get.off(()=>HomeScreen());
     }
   }
