@@ -27,6 +27,7 @@ class HomeScreen extends StatelessWidget {
             SliverAppBar(
               backgroundColor: Colors.white,
               floating: true,
+              centerTitle: true,
               title: Text(
                 "Hi ${user.username}",
                 style: textTheme.headline1!.copyWith(color: Colors.black,fontWeight: FontWeight.w500),

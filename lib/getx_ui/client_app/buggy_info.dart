@@ -141,210 +141,212 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Pick up date and time",style: textTheme.headline1,),
-                          const SizedBox(height: 5,),
-                          SizedBox(
-                            width: w*0.8,
-                            height: 40,
-                            child: TextFormField(
-                              controller: dateTimeController,
-                              focusNode: dateTimeNode,
-                              decoration: InputDecoration(
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black
-                                  )
+                      child: SafeArea(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Pick up date and time",style: textTheme.headline1,),
+                            const SizedBox(height: 5,),
+                            SizedBox(
+                              width: w*0.8,
+                              height: 40,
+                              child: TextFormField(
+                                controller: dateTimeController,
+                                focusNode: dateTimeNode,
+                                decoration: InputDecoration(
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black
+                                    )
+                                  ),
+                                  filled: false,
+                                  hintText: 'Date Time',
+                                  hintStyle: const TextStyle(
+                                    fontSize: 14
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                    borderSide: const BorderSide(
+                                      style: BorderStyle.solid
+                                    )
+                                  ),
                                 ),
-                                filled: false,
-                                hintText: 'Date Time',
-                                hintStyle: const TextStyle(
-                                  fontSize: 14
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                  borderSide: const BorderSide(
-                                    style: BorderStyle.solid
-                                  )
-                                ),
+                                readOnly: true,
+                                textInputAction: TextInputAction.next,
+                                onTap: (){
+                                  _pickDateTime();
+                                },
                               ),
-                              readOnly: true,
-                              textInputAction: TextInputAction.next,
-                              onTap: (){
-                                _pickDateTime();
-                              },
                             ),
-                          ),
 
-                          const SizedBox(height: 10,),
-                          buggyOrPorter=='buggy'?Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Adults",style: textTheme.headline1,),
-                                  const SizedBox(height: 5,),
-                                  SizedBox(
-                                    width: w*0.4,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: adultController,
-                                      focusNode: adultNode,
-                                      decoration: InputDecoration(
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black
-                                            )
+                            const SizedBox(height: 10,),
+                            buggyOrPorter=='buggy'?Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Adults",style: textTheme.headline1,),
+                                    const SizedBox(height: 5,),
+                                    SizedBox(
+                                      width: w*0.4,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: adultController,
+                                        focusNode: adultNode,
+                                        decoration: InputDecoration(
+                                          focusedBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black
+                                              )
+                                          ),
+                                          filled: false,
+                                          hintText: 'No of adults',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                  style: BorderStyle.solid
+                                              )
+                                          ),
                                         ),
-                                        filled: false,
-                                        hintText: 'No of adults',
-                                        hintStyle: const TextStyle(
-                                            fontSize: 14
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: const BorderSide(
-                                                style: BorderStyle.solid
-                                            )
-                                        ),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                                        textInputAction: TextInputAction.next,
+                                        onTap: (){
+
+                                        },
                                       ),
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                                      textInputAction: TextInputAction.next,
-                                      onTap: (){
-
-                                      },
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Kids (Below 5 yrs)",style: textTheme.headline1,),
-                                  const SizedBox(height: 5,),
-                                  SizedBox(
-                                    width: w*0.4,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: kidsController,
-                                      focusNode: kidsNode,
-                                      decoration: InputDecoration(
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black
-                                            )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Kids (Below 5 yrs)",style: textTheme.headline1,),
+                                    const SizedBox(height: 5,),
+                                    SizedBox(
+                                      width: w*0.4,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: kidsController,
+                                        focusNode: kidsNode,
+                                        decoration: InputDecoration(
+                                          focusedBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black
+                                              )
+                                          ),
+                                          filled: false,
+                                          hintText: 'No of kids',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                  style: BorderStyle.solid
+                                              )
+                                          ),
                                         ),
-                                        filled: false,
-                                        hintText: 'No of kids',
-                                        hintStyle: const TextStyle(
-                                            fontSize: 14
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: const BorderSide(
-                                                style: BorderStyle.solid
-                                            )
-                                        ),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                                        textInputAction: TextInputAction.next,
+                                        onTap: (){
+
+                                        },
                                       ),
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                                      textInputAction: TextInputAction.next,
-                                      onTap: (){
-
-                                      },
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ):Row(),
+                                  ],
+                                )
+                              ],
+                            ):Row(),
 
-                          const SizedBox(height: 10,),
-                          buggyOrPorter=='porter'?Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Carry Bags",style: textTheme.headline1,),
-                                  const SizedBox(height: 5,),
-                                  SizedBox(
-                                    width: w*0.4,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: carryBagController,
-                                      focusNode: carryBagNode,
-                                      decoration: InputDecoration(
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black
-                                            )
+                            const SizedBox(height: 10,),
+                            buggyOrPorter=='porter'?Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Carry Bags",style: textTheme.headline1,),
+                                    const SizedBox(height: 5,),
+                                    SizedBox(
+                                      width: w*0.4,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: carryBagController,
+                                        focusNode: carryBagNode,
+                                        decoration: InputDecoration(
+                                          focusedBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black
+                                              )
+                                          ),
+                                          filled: false,
+                                          hintText: 'No of carry bags',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                  style: BorderStyle.solid
+                                              )
+                                          ),
                                         ),
-                                        filled: false,
-                                        hintText: 'No of carry bags',
-                                        hintStyle: const TextStyle(
-                                            fontSize: 14
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: const BorderSide(
-                                                style: BorderStyle.solid
-                                            )
-                                        ),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                                        textInputAction: TextInputAction.next,
+                                        onTap: (){
+
+                                        },
                                       ),
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                                      textInputAction: TextInputAction.next,
-                                      onTap: (){
-
-                                      },
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Suitcases",style: textTheme.headline1,),
-                                  const SizedBox(height: 5,),
-                                  SizedBox(
-                                    width: w*0.4,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: suitcaseController,
-                                      focusNode: suitcaseNode,
-                                      decoration: InputDecoration(
-                                        focusedBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.black
-                                            )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Suitcases",style: textTheme.headline1,),
+                                    const SizedBox(height: 5,),
+                                    SizedBox(
+                                      width: w*0.4,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: suitcaseController,
+                                        focusNode: suitcaseNode,
+                                        decoration: InputDecoration(
+                                          focusedBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.black
+                                              )
+                                          ),
+                                          filled: false,
+                                          hintText: 'No of suitcases',
+                                          hintStyle: const TextStyle(
+                                              fontSize: 14
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(5),
+                                              borderSide: const BorderSide(
+                                                  style: BorderStyle.solid
+                                              )
+                                          ),
                                         ),
-                                        filled: false,
-                                        hintText: 'No of suitcases',
-                                        hintStyle: const TextStyle(
-                                            fontSize: 14
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: const BorderSide(
-                                                style: BorderStyle.solid
-                                            )
-                                        ),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                                        textInputAction: TextInputAction.next,
+                                        onTap: (){
+
+                                        },
                                       ),
-                                      keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                                      textInputAction: TextInputAction.next,
-                                      onTap: (){
-
-                                      },
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ):Row()
+                                  ],
+                                )
+                              ],
+                            ):Row()
 
-                        ],
+                          ],
+                        ),
                       ),
                     ),
 
@@ -573,11 +575,11 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
         var t1 = Theme.of(context).textTheme.headline1;
         var t2 = const TextStyle(
         fontWeight: FontWeight.w400,
-        fontSize: 16
+        fontSize: 14
         );
         return Container(
           width: w,
-          height: h*0.7,
+          height: h,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15)
@@ -644,7 +646,6 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                 serviceType=='Buggy'?Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10,),
                     Text('$serviceType Details',style: t2.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold
@@ -660,7 +661,6 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                 serviceType=='Porter'?Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10,),
                     Text('$serviceType Details',style: t2.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.bold
@@ -747,10 +747,10 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Per Adult : Rs 50 | Per Kid : Rs 25",style:TextStyle(
+          const Text("Per Adult : Rs 50 | Per Kid : Rs 25",style:TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 12,
-              color: Colors.grey.withOpacity(0.5)
+              color: Colors.grey
           ),),
           const SizedBox(height: 10,),
           buildPriceRow('SubTotal','Rs $subtotal'),
@@ -766,10 +766,10 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Per Suitcase : Rs 50 | Per Carrybag  : Rs 25",style:TextStyle(
+          const Text("Per Suitcase : Rs 50 | Per Carrybag  : Rs 25",style:TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 12,
-            color: Colors.grey.withOpacity(0.5)
+            color: Colors.grey
           ),),
           const SizedBox(height: 10,),
           buildPriceRow('SubTotal','Rs $subtotal'),

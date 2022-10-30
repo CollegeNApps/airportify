@@ -116,7 +116,12 @@ class _OTPScreenState extends State<OTPScreen> {
                         ///Checking if the user(phoneNumber) already exists
                         ///If yes: Then we direct the user to the home screen
                         ///Else : We proceed to the on boarding section
-                        createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+
+                        var userExists = await authController.checkUserExistence2(widget.phoneNumber);
+                        if(userExists==false){
+                          createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+                        }
+
                         AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
                         Get.to(()=>HomeScreen());
                       }else{

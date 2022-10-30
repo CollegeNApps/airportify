@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/models/user/user_info.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -71,6 +72,20 @@ class AuthController extends GetxController{
     }else{
       _hasInternet.value = true;
     }
+  }
+
+  Future<bool> checkUserExistence2(String phoneNumber)async{
+    final res = await FirebaseFirestore.instance
+        .collection("users")
+        .where("phoneNo",isEqualTo: phoneNumber)
+        .get()
+        .then((query) {
+      var users = query.docs.map((e) => UserDetails.fromDocument(e)).toList();
+      return users;
+    });
+    print("result of checkUserExistence2:${res.length}");
+    bool existenceOfUser = res.length >=1;
+    return existenceOfUser;
   }
 
 }
