@@ -66,6 +66,7 @@ class AuthController extends GetxController{
     }
   }
 
+
   _handleInternetIssue(bool internet){
     if(internet==false){
       _hasInternet.value = false;
