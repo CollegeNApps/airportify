@@ -6,15 +6,14 @@ class T1 {
   static ThemeData themeData() {
     return ThemeData(
       // scaffoldBackgroundColor: const Color(0xff292929),
-      scaffoldBackgroundColor: const Color(0xff191919),
-      primaryColor: const Color(0xffFAFF00),
-      canvasColor: const Color(0xffE3D170),
-      backgroundColor: Colors.white,
+      scaffoldBackgroundColor: Colors.white,
+      primaryColor: const Color(0xffFFDB29),
+      canvasColor: Colors.black,
+      // backgroundColor: Colors.white,
       textTheme: TextTheme(
-        caption: GoogleFonts.merriweather(fontWeight: FontWeight.normal, fontSize: 30),
-        headline1: GoogleFonts.reemKufi(fontSize: 18),
-        headline2: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
-        headline3: GoogleFonts.ptSerif(fontSize: 16, fontWeight: FontWeight.normal),
+        caption: GoogleFonts.merriweather(fontWeight: FontWeight.normal, fontSize: 15),
+        headline1: GoogleFonts.poppins(fontSize: 15,color: Colors.black),
+        headline2: GoogleFonts.ptSerif(fontSize: 16, fontWeight: FontWeight.normal),
         // subtitle1: GoogleFonts.satisfy(fontSize: 30,fontWeight: FontWeight.normal)
       ),
     );
