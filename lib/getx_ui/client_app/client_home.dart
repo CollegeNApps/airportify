@@ -110,6 +110,8 @@ class ClientHomeScreen extends StatelessWidget {
                                       child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           onTap: () {
                                             Get.to(() => FlightInfoScreen(
                                                   index: index,
