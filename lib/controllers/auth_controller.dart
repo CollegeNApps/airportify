@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:airportify/controllers/firebase_controller.dart';
@@ -9,10 +7,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import '../getx_ui/client_app/home_screen.dart';
+import '../getx_ui/client_app/client_home.dart';
 import '../getx_ui/phone_login_screen.dart';
 
-class AuthController extends GetxController{
+class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
   late Rx<User?> _user;
@@ -20,9 +18,8 @@ class AuthController extends GetxController{
 
   static UserDetails firebaseUser = UserDetails();
 
-
   late StreamSubscription subscription;
-  var _hasInternet = false.obs;
+  final _hasInternet = false.obs;
   bool get hasInternet => _hasInternet.value;
   var signedInBool = true.obs;
   RxBool adminPass = false.obs;
@@ -44,8 +41,8 @@ class AuthController extends GetxController{
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
 
-    ever(_hasInternet,_handleInternetIssue);
-    ever(_user,_initializeApp);
+    ever(_hasInternet, _handleInternetIssue);
+    ever(_user, _initializeApp);
   }
 
   @override
@@ -55,38 +52,36 @@ class AuthController extends GetxController{
     subscription.cancel();
   }
 
-  _initializeApp(User? user)async{
-    if(user==null){
+  _initializeApp(User? user) async {
+    if (user == null) {
       print("Go to login page");
-      Get.offAll(()=>PhoneLoginScreen());
-    }else{
+      Get.offAll(() => PhoneLoginScreen());
+    } else {
       print("Go to home page");
       firebaseUser = await FirebaseController.fetchUserInfo(user);
-      Get.off(()=>HomeScreen());
+      Get.off(() => ClientHomeScreen());
     }
   }
 
-
-  _handleInternetIssue(bool internet){
-    if(internet==false){
+  _handleInternetIssue(bool internet) {
+    if (internet == false) {
       _hasInternet.value = false;
-    }else{
+    } else {
       _hasInternet.value = true;
     }
   }
 
-  Future<bool> checkUserExistence2(String phoneNumber)async{
+  Future<bool> checkUserExistence2(String phoneNumber) async {
     final res = await FirebaseFirestore.instance
         .collection("users")
-        .where("phoneNo",isEqualTo: phoneNumber)
+        .where("phoneNo", isEqualTo: phoneNumber)
         .get()
         .then((query) {
       var users = query.docs.map((e) => UserDetails.fromDocument(e)).toList();
       return users;
     });
     print("result of checkUserExistence2:${res.length}");
-    bool existenceOfUser = res.length >=1;
+    bool existenceOfUser = res.isNotEmpty;
     return existenceOfUser;
   }
-
 }

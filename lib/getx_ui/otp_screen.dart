@@ -1,5 +1,5 @@
 import 'package:airportify/controllers/firebase_controller.dart';
-import 'package:airportify/getx_ui/client_app/home_screen.dart';
+import 'package:airportify/getx_ui/client_app/client_home.dart';
 import 'package:airportify/getx_ui/phone_login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,7 +45,10 @@ class _OTPScreenState extends State<OTPScreen> {
     final defaultPinTheme = PinTheme(
       width: 50,
       height: 50,
-      textStyle: TextStyle(fontSize: 19*s, color: const Color.fromRGBO(30, 60, 87, 1), fontWeight: FontWeight.w600),
+      textStyle: TextStyle(
+          fontSize: 19 * s,
+          color: const Color.fromRGBO(30, 60, 87, 1),
+          fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         border: Border.all(color: const Color.fromRGBO(197, 197, 197, 1.0)),
         borderRadius: BorderRadius.circular(15),
@@ -69,34 +72,52 @@ class _OTPScreenState extends State<OTPScreen> {
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: GestureDetector(
-          onTap: (){
+          onTap: () {
             _pinNode.unfocus();
           },
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height*0.1,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
               Center(
-                child: Text("Verify your \n Phone number",textAlign: TextAlign.center,style:GoogleFonts.roboto(
-                    fontSize: 23*s,
+                child: Text(
+                  "Verify your \n Phone number",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                    fontSize: 23 * s,
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                )  ,),
+                  ),
+                ),
               ),
-              const SizedBox(height: 10,),
-              Center(child:Text('+91${widget.phoneNumber}',style: GoogleFonts.roboto(
-                fontSize: 14*s,
-                color: Colors.grey,
-                fontWeight: FontWeight.normal,
-              ),)),
-              const SizedBox(height: 7,),
-              Center(child:Text("Enter your OTP code here",style: GoogleFonts.roboto(
-                fontSize: 14*s,
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-              ),)),
-              const SizedBox(height: 25,),
-
-
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                  child: Text(
+                '+91${widget.phoneNumber}',
+                style: GoogleFonts.roboto(
+                  fontSize: 14 * s,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                ),
+              )),
+              const SizedBox(
+                height: 7,
+              ),
+              Center(
+                  child: Text(
+                "Enter your OTP code here",
+                style: GoogleFonts.roboto(
+                  fontSize: 14 * s,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              )),
+              const SizedBox(
+                height: 25,
+              ),
               Pinput(
                 closeKeyboardWhenCompleted: false,
                 length: 6,
@@ -105,30 +126,34 @@ class _OTPScreenState extends State<OTPScreen> {
                 focusNode: _pinNode,
                 textInputAction: TextInputAction.none,
                 controller: _pinPutController,
-                onCompleted: (String pin)async{
-                  try{
+                onCompleted: (String pin) async {
+                  try {
                     await FirebaseAuth.instance
-                        .signInWithCredential(PhoneAuthProvider.credential(verificationId: _verificationCode, smsCode: pin))
-                        .then((value) async{
-                      if(value.user!=null){
+                        .signInWithCredential(PhoneAuthProvider.credential(
+                            verificationId: _verificationCode, smsCode: pin))
+                        .then((value) async {
+                      if (value.user != null) {
                         print('User Logged in Successfully via pinPut');
 
                         ///Checking if the user(phoneNumber) already exists
                         ///If yes: Then we direct the user to the home screen
                         ///Else : We proceed to the on boarding section
 
-                        var userExists = await authController.checkUserExistence2(widget.phoneNumber);
-                        if(userExists==false){
-                          createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+                        var userExists = await authController
+                            .checkUserExistence2(widget.phoneNumber);
+                        if (userExists == false) {
+                          createUserAccount(value.user!.phoneNumber.toString(),
+                              value.user!.uid);
                         }
 
-                        AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
-                        Get.to(()=>HomeScreen());
-                      }else{
-                        Get.to(()=>OnBoardingScreens());
+                        AuthController.firebaseUser =
+                            await FirebaseController.fetchUserInfo(value.user!);
+                        Get.to(() => ClientHomeScreen());
+                      } else {
+                        Get.to(() => OnBoardingScreens());
                       }
                     });
-                  }catch(e){
+                  } catch (e) {
                     FocusScope.of(context).unfocus();
                     Fluttertoast.showToast(
                         msg: 'Invalid OTP Entered',
@@ -137,52 +162,66 @@ class _OTPScreenState extends State<OTPScreen> {
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
-                        fontSize: 16.0
-                    );
+                        fontSize: 16.0);
                   }
                 },
                 submittedPinTheme: submittedPinTheme,
                 defaultPinTheme: defaultPinTheme,
                 focusedPinTheme: focusedPinTheme,
               ),
-
-
-              const SizedBox(height: 25,),
-              Center(child:Text("Didn't receive any code?",style:GoogleFonts.roboto(
-                fontSize: 14*s,
-                color: Colors.grey,
-                fontWeight: FontWeight.normal,
-              ) ,)),
-              const SizedBox(height: 10,),
-              Center(child:InkWell(
-                onTap: (){
+              const SizedBox(
+                height: 25,
+              ),
+              Center(
+                  child: Text(
+                "Didn't receive any code?",
+                style: GoogleFonts.roboto(
+                  fontSize: 14 * s,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                ),
+              )),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                  child: InkWell(
+                onTap: () {
                   _verifyPhone();
                 },
-                child: Text("Resend OTP",style:GoogleFonts.roboto(
-                  fontSize: 19*s,
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  fontWeight: FontWeight.normal,
-                ) ,),
+                child: Text(
+                  "Resend OTP",
+                  style: GoogleFonts.roboto(
+                    fontSize: 19 * s,
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
               )),
-              Lottie.asset('images/lottie/60247-mobile-otp.json',width: w,height: h*0.4),
+              Lottie.asset('images/lottie/60247-mobile-otp.json',
+                  width: w, height: h * 0.4),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: InkWell(
-                  onTap: (){
-                    Get.offAll(()=>PhoneLoginScreen());
+                  onTap: () {
+                    Get.offAll(() => PhoneLoginScreen());
                   },
                   child: Container(
-                    width: w*0.5,
+                    width: w * 0.5,
                     height: 50,
                     decoration: BoxDecoration(
                       color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Center(child:Text("Change Number",style: GoogleFonts.roboto(
-                      color:Colors.white,
-                      fontSize: 17*s,
-                      fontWeight: FontWeight.w500,
-                    ),)),
+                    child: Center(
+                        child: Text(
+                      "Change Number",
+                      style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontSize: 17 * s,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )),
                   ),
                 ),
               )
@@ -196,26 +235,27 @@ class _OTPScreenState extends State<OTPScreen> {
   _verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: '+91${widget.phoneNumber}',
-        verificationCompleted: (PhoneAuthCredential credentials) async{
-          await FirebaseAuth.instance.signInWithCredential(credentials).then((value) async {
-            if(value.user!=null){
+        verificationCompleted: (PhoneAuthCredential credentials) async {
+          await FirebaseAuth.instance
+              .signInWithCredential(credentials)
+              .then((value) async {
+            if (value.user != null) {
               // createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
-              Get.to(()=>HomeScreen());
-            }else{
-              Get.to(()=>OnBoardingScreens());
+              Get.to(() => ClientHomeScreen());
+            } else {
+              Get.to(() => OnBoardingScreens());
             }
           });
         },
         verificationFailed: (FirebaseException e) {
           Fluttertoast.showToast(
-            msg: 'Phone Verification Error : ${e.message}',
+              msg: 'Phone Verification Error : ${e.message}',
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.SNACKBAR,
               timeInSecForIosWeb: 1,
               backgroundColor: Colors.red,
               textColor: Colors.white,
-              fontSize: 16.0
-          );
+              fontSize: 16.0);
         },
         codeSent: (String verificationID, int? resendToken) {
           setState(() {
@@ -229,14 +269,13 @@ class _OTPScreenState extends State<OTPScreen> {
         });
   }
 
-  createUserAccount(String phoneNo,String uid ){
+  createUserAccount(String phoneNo, String uid) {
     print("Entered Creating account function");
     FirebaseFirestore.instance.collection('users').doc().set({
-      'username':AuthController.username,
-      'phoneNo':phoneNo.substring(3),
-      'uid':uid
+      'username': AuthController.username,
+      'phoneNo': phoneNo.substring(3),
+      'uid': uid
     });
     print("Created account");
   }
-
 }
