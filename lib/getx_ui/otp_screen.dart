@@ -1,10 +1,13 @@
-import 'package:airportify/getx_ui/bottom_nav_screen.dart';
+import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/getx_ui/client_app/home_screen.dart';
 import 'package:airportify/getx_ui/phone_login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 
 import '../controllers/auth_controller.dart';
@@ -20,6 +23,7 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final AuthController authController = Get.find();
+  final FirebaseController fbController = Get.find();
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinNode = FocusNode();
 
@@ -112,7 +116,14 @@ class _OTPScreenState extends State<OTPScreen> {
                         ///Checking if the user(phoneNumber) already exists
                         ///If yes: Then we direct the user to the home screen
                         ///Else : We proceed to the on boarding section
-                        Get.to(()=>BottomNavigationScreen());
+
+                        var userExists = await authController.checkUserExistence2(widget.phoneNumber);
+                        if(userExists==false){
+                          createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+                        }
+
+                        AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
+                        Get.to(()=>HomeScreen());
                       }else{
                         Get.to(()=>OnBoardingScreens());
                       }
@@ -153,7 +164,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   fontWeight: FontWeight.normal,
                 ) ,),
               )),
-              SizedBox(height: h*0.4,),
+              Lottie.asset('images/lottie/60247-mobile-otp.json',width: w,height: h*0.4),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: InkWell(
@@ -164,7 +175,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     width: w*0.5,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(child:Text("Change Number",style: GoogleFonts.roboto(
@@ -188,7 +199,8 @@ class _OTPScreenState extends State<OTPScreen> {
         verificationCompleted: (PhoneAuthCredential credentials) async{
           await FirebaseAuth.instance.signInWithCredential(credentials).then((value) async {
             if(value.user!=null){
-              Get.to(()=>BottomNavigationScreen());
+              // createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+              Get.to(()=>HomeScreen());
             }else{
               Get.to(()=>OnBoardingScreens());
             }
@@ -216,4 +228,15 @@ class _OTPScreenState extends State<OTPScreen> {
           });
         });
   }
+
+  createUserAccount(String phoneNo,String uid ){
+    print("Entered Creating account function");
+    FirebaseFirestore.instance.collection('users').doc().set({
+      'username':AuthController.username,
+      'phoneNo':phoneNo.substring(3),
+      'uid':uid
+    });
+    print("Created account");
+  }
+
 }

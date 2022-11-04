@@ -9,15 +9,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/auth_controller.dart';
-import 'bottom_nav_screen.dart';
+import 'client_app/home_screen.dart';
 
 class PhoneLoginScreen extends StatelessWidget {
   PhoneLoginScreen({Key? key}) : super(key: key);
 
   final TextEditingController _phoneNoController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final FocusNode _phoneNoNode = FocusNode();
-  final FocusNode _passwordNode = FocusNode();
+  final FocusNode _userNode = FocusNode();
 
   String email ='';
   String password = '';
@@ -39,6 +39,7 @@ class PhoneLoginScreen extends StatelessWidget {
             return GestureDetector(
               onTap: (){
                 _phoneNoNode.unfocus();
+                _userNode.unfocus();
               },
               child: Scaffold(
                 backgroundColor: Colors.white,
@@ -50,11 +51,14 @@ class PhoneLoginScreen extends StatelessWidget {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(height: h*0.4,),
+                            Lottie.asset(
+                              'images/lottie/105173-verification-code-otp.json',
+                              fit: BoxFit.contain,
+                            ),
                             Center(
                               child: Container(
                                 width: w*0.9,
-                                height:ctrl.adminPass.value==true? h*0.4: h*0.3,
+                                // height:ctrl.adminPass.value==true? h*0.4: h*0.3,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
@@ -75,15 +79,50 @@ class PhoneLoginScreen extends StatelessWidget {
                                       Text("Hi",style: GoogleFonts.roboto(
                                           fontSize: 17*s,
                                           // color: const Color(0xff909090),
-                                          color: Theme.of(context).scaffoldBackgroundColor,
+                                          color: Theme.of(context).canvasColor,
                                           fontWeight: FontWeight.bold
                                       ),),
-                                      Text("Let's get you acquainted",style:GoogleFonts.roboto(
+                                      Text("Let's get you logged in",style:GoogleFonts.roboto(
                                         fontSize: 19*s,
-                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        color: Theme.of(context).canvasColor,
                                         fontWeight: FontWeight.bold,
                                       ) ,),
                                       SizedBox(height: h*0.02,),
+
+                                      TextFormField(
+                                        controller: _usernameController,
+                                        focusNode: _userNode,
+                                        keyboardType: TextInputType.name,
+                                        style: TextStyle(
+                                          fontSize: 16*s,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        decoration: InputDecoration(
+                                            focusColor: Colors.transparent,
+                                            filled: true,
+                                            fillColor: const Color(0xffffffff),
+                                            // fillColor: const Color(0xff393939),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                              borderSide: const BorderSide(
+                                                  style: BorderStyle.none
+                                              ),
+                                            ),
+                                            prefix: const Text("User ",style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                              letterSpacing: 1
+                                            ),),
+                                            hintText: "name",
+                                            hintStyle: const TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff767676),
+                                                letterSpacing: 1
+                                            )
+                                        ),
+                                      ),
+                                      SizedBox(height: h*0.01,),
                                       TextFormField(
                                         controller: _phoneNoController,
                                         focusNode: _phoneNoNode,
@@ -134,8 +173,8 @@ class PhoneLoginScreen extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                       ) ,),
                                       if(ctrl.adminPass.value==true)TextFormField(
-                                        controller: _passwordController,
-                                        focusNode: _passwordNode,
+                                        controller: _usernameController,
+                                        focusNode: _userNode,
                                         keyboardType: TextInputType.phone,
                                         style: TextStyle(
                                           fontSize: 16*s,
@@ -185,13 +224,23 @@ class PhoneLoginScreen extends StatelessWidget {
                                                   fontSize: 16.0
                                               );
 
-
+                                            }else if(_usernameController.text.isEmpty){
+                                              Fluttertoast.showToast(
+                                                  msg: "Please enter username",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.SNACKBAR,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0
+                                              );
                                             }else{
-                                              print("phone no :${_phoneNoController.text}]\nPassword :${_passwordController.text}");
-                                              if(_phoneNoController.text=='1234567890' && _passwordController.text == '12345'){
+                                              print("phone no :${_phoneNoController.text}]\nPassword :${_usernameController.text}");
+                                              if(_phoneNoController.text=='1234567890' && _usernameController.text == '12345'){
                                                 await FirebaseAuth.instance.signInAnonymously();
-                                                Get.to(()=>BottomNavigationScreen());
+                                                Get.to(()=>HomeScreen());
                                               }else{
+                                                AuthController.username = _usernameController.text;
                                                 Get.offAll(()=> OTPScreen(phoneNumber: _phoneNoController.text,));
 
                                               }
@@ -212,7 +261,7 @@ class PhoneLoginScreen extends StatelessWidget {
                                                   )
                                                 ]
                                             ),
-                                            child: Center(child: Text("Sign up ",style:TextStyle(
+                                            child: Center(child: Text("Get OTP",style:TextStyle(
                                                 fontSize: 16*s,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold
@@ -221,6 +270,7 @@ class PhoneLoginScreen extends StatelessWidget {
                                         ),
                                       ),
 
+                                      const SizedBox(height: 10,)
                                     ],
                                   ),
                                 ),
