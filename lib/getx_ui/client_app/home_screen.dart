@@ -1,7 +1,7 @@
 import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/flight_info.dart';
-import 'package:airportify/models/flight_info.dart';
+import 'package:airportify/models/flight/flight_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
