@@ -87,7 +87,7 @@ Widget CustomStepper({required double width, required int pageIndex}) {
         StepsIndicator(
           nbSteps: 3,
           selectedStep: pageIndex,
-          lineLength: width * 0.28,
+          lineLength: width * 0.35,
           doneLineColor: Colors.black,
           doneStepColor: Colors.black,
           undoneLineColor: Colors.grey,

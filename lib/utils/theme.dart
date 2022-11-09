@@ -5,7 +5,7 @@ class T1 {
   static ThemeData themeData() {
     return ThemeData(
       // scaffoldBackgroundColor: const Color(0xff292929),
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: const Color(0xFFf5f5f5),
       primaryColor: const Color(0xffFFDB29),
       canvasColor: Colors.black,
       primarySwatch: Colors.amber,

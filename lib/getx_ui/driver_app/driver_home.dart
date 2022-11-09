@@ -1,6 +1,6 @@
 import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/getx_ui/client_app/flight_info.dart';
-import 'package:airportify/getx_ui/driver_app/accept_pickup.dart';
+import 'package:airportify/getx_ui/driver_app/driver_status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -165,7 +165,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          Get.to(() => AcceptPickup(index: index));
+                          Get.to(() => DriverStatus(index: index));
                         },
                         child: SizedBox(
                           width: w,
