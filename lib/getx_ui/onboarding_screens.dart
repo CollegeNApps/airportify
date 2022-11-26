@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class OnBoardingScreens extends StatelessWidget {
@@ -7,6 +5,10 @@ class OnBoardingScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Container(
+          child:
+              const Center(child: Text("Ayyo this is the onboarding screen"))),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:airportify/getx_ui/driver_app/accept_pickup.dart';
+import 'package:airportify/getx_ui/driver_app/driver_home.dart';
 import 'package:airportify/getx_ui/driver_app/on_the_way.dart';
 import 'package:airportify/getx_ui/driver_app/ride_complete.dart';
 import 'package:flutter/material.dart';
@@ -53,36 +54,44 @@ class _DriverStatusState extends State<DriverStatus> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Column(
-              children: [
-                // stepper widget mimic
-                CustomStepper(width: w, pageIndex: pageIndex),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+            child: Container(
+              color: const Color(0xFFf5f5f5),
+              child: Column(
+                children: const [],
+              ),
             ),
           )
         ],
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: PageView(
-                padEnds: true,
-                onPageChanged: (value) => setState(() {
-                  pageIndex = value;
-                }),
-                controller: pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: const [
-                  AcceptPickup(),
-                  OneTheWayPage(),
-                  RideComplete()
-                ],
+        body: Container(
+          color: const Color(0xFFf5f5f5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // stepper widget mimic
+              CustomStepper(width: w, pageIndex: pageIndex),
+              const SizedBox(
+                height: 20,
               ),
-            )
-          ],
+              Expanded(
+                child: PageView(
+                  // clipBehavior: Clip.none, allowImplicitScrolling: false,
+                  // padEnds: true,
+                  onPageChanged: (value) => setState(() {
+                    pageIndex = value;
+                  }),
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    AcceptPickup(
+                      index: widget.index,
+                    ),
+                    OneTheWayPage(index: widget.index),
+                    RideComplete(index: widget.index)
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       )),
       bottomNavigationBar: Container(
@@ -94,6 +103,14 @@ class _DriverStatusState extends State<DriverStatus> {
           child: InkWell(
             splashColor: Colors.amber,
             onTap: () {
+              if (pageController.page == 1) {
+                if (!validateOnTheWay()) return;
+              }
+
+              if (pageController.page == 2) {
+                Get.offAll(const DriverHomeScreen());
+              }
+
               pageController.animateToPage(pageIndex + 1,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.fastLinearToSlowEaseIn);
@@ -122,10 +139,11 @@ class _DriverStatusState extends State<DriverStatus> {
             child: SizedBox(
               width: w,
               height: h * 0.06,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'Next',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  pageIndex == 2 ? "Finish" : 'Next',
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ),
             ),

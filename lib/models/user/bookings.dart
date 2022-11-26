@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Bookings {
+class BookingInfo {
   String? serviceType;
   int? adults;
   int? kids;
@@ -16,8 +16,9 @@ class Bookings {
   String? from;
   String? orderedBy;
   String? pickupTime;
+  String? gateNo;
 
-  Bookings(
+  BookingInfo(
       {this.serviceType,
       this.adults,
       this.kids,
@@ -31,12 +32,13 @@ class Bookings {
       this.flightStatusCode,
       this.from,
       this.orderedBy,
-      this.pickupTime});
+      this.pickupTime,
+      this.gateNo});
 
-  factory Bookings.fromDocument(
+  factory BookingInfo.fromDocument(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     var d = snapshot.data();
-    return Bookings(
+    return BookingInfo(
         adults: d!['adults'],
         serviceType: d['serviceType'],
         kids: d['kids'],
@@ -50,6 +52,7 @@ class Bookings {
         flightStatusCode: d['flightStatusCode'],
         from: d['from'],
         orderedBy: d['orderedBy'],
-        pickupTime: d['pickUpTime']);
+        pickupTime: d['pickUpTime'],
+        gateNo: d["gateNo"]);
   }
 }

@@ -2,10 +2,13 @@ import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/getx_ui/client_app/flight_info.dart';
 import 'package:airportify/getx_ui/driver_app/driver_status.dart';
 import 'package:airportify/getx_ui/profile_screen.dart';
+import 'package:airportify/models/user/bookings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../controllers/firebase_controller.dart';
 
 class DriverHomeScreen extends StatefulWidget {
   const DriverHomeScreen({Key? key}) : super(key: key);
@@ -15,7 +18,7 @@ class DriverHomeScreen extends StatefulWidget {
 }
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
-  // final FirebaseController fb = Get.find();
+  final FirebaseController fb = Get.find();
   late VideoPlayerController videoPlayerController;
   late Future<void> _initialiseVideo;
 
@@ -69,7 +72,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     icon: const Icon(Icons.notifications_outlined,
                         color: Colors.black)),
                 IconButton(
-                    onPressed: () => Get.to(()=> ProfileScreen(name: user.name!)),
+                    onPressed: () =>
+                        Get.to(() => ProfileScreen(name: user.name!)),
                     icon:
                         const Icon(Icons.account_circle, color: Colors.black)),
               ],
@@ -110,7 +114,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Flights",
+                        "Bookings",
                         style: textTheme.headline1!.copyWith(
                             fontSize: 24, fontWeight: FontWeight.w500),
                       ),
@@ -135,159 +139,173 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   Widget clientOrdersTile(double w, double h, TextTheme textTheme) {
-    return Expanded(
-      child: SizedBox(
-        child: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
-            //  ctrl.flights.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              // FlightInfo flight = ctrl.flights[index];
+    return GetX<FirebaseController>(builder: (ctrl) {
+      return Expanded(
+        child: SizedBox(
+          child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: ctrl.bookings.isEmpty
+                ? Container(
+                    child: Center(
+                        child: Text(
+                      "No Bookings orders today!",
+                      style: textTheme.headline1,
+                    )),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.zero,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: ctrl.bookings.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      BookingInfo bookingInfo = ctrl.bookings[index];
 
-              return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.5),
-                              offset: const Offset(0, 3),
-                              blurRadius: 5,
-                              spreadRadius: 0)
-                        ],
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(10),
-                        onTap: () {
-                          Get.to(() => DriverStatus(index: index));
-                        },
-                        child: SizedBox(
-                          width: w,
-                          // height: h * 0.11,
-                          child: Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Hero(
-                                  tag: 'flightImage$index',
-                                  child: ClipOval(
-                                    child: CircleAvatar(
-                                        radius: w * 0.1,
-                                        backgroundColor: Colors.white,
-                                        child:
-                                            // Image.network(
-                                            //   flight.image
-                                            //       .toString(),
-                                            //   fit: BoxFit.contain,
-                                            // ),
-                                            Image.asset(
-                                          "images/arrival.jpg",
-                                          fit: BoxFit.contain,
-                                        )),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "flightname",
-                                      // flight.name.toString(),
-                                      style: textTheme.headline1!
-                                          .copyWith(fontSize: 15),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Arrival Time : \$ArrivalTime",
-                                      // "Arrival Time : ${flight.at}",
-                                      style: textTheme.headline1!.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    // SizedBox(width: w*0.08,),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "From : \$placeName",
-                                      // "From : ${flight.from}",
-                                      style: textTheme.headline1!.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 5),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        '',
-                                        style: textTheme.headline1!
-                                            .copyWith(fontSize: 15),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "Airline : \$airline", // "Airline : ${flight.airline}",
-                                        style: textTheme.headline1!.copyWith(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                        width: w * 0.23,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                            // color: ctrl
-                                            //     .flightStatusCodeColors[flight
-                                            //         .statusCode!
-                                            //         .toInt() -
-                                            //     1],
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child: Center(
-                                          child: Text(
-                                            "\${flight.status}",
-                                            style: textTheme.headline1!
-                                                .copyWith(fontSize: 12),
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 4),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      offset: const Offset(0, 3),
+                                      blurRadius: 5,
+                                      spreadRadius: 0)
+                                ],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(10),
+                                onTap: () {
+                                  Get.to(() => DriverStatus(index: index));
+                                },
+                                child: SizedBox(
+                                  width: w,
+                                  // height: h * 0.11,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Hero(
+                                          tag: 'flightImage$index',
+                                          child: ClipOval(
+                                            child: CircleAvatar(
+                                                radius: w * 0.09,
+                                                backgroundColor: Colors.green,
+                                                child: Text(
+                                                  "${index + 1}",
+                                                  style: textTheme.headline1!
+                                                      .copyWith(
+                                                          color: Colors.white,
+                                                          fontSize: 28),
+                                                )),
                                           ),
                                         ),
-                                      )
-                                    ],
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              // "flightname",
+                                              bookingInfo.flightName.toString(),
+                                              style: textTheme.headline1!
+                                                  .copyWith(fontSize: 15),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              // "Arrival Time : \$ArrivalTime",
+                                              "Arrival Time : ${bookingInfo.at}",
+                                              style: textTheme.headline1!
+                                                  .copyWith(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                            ),
+                                            // SizedBox(width: w*0.08,),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              // "From : \$placeName",
+                                              "From : ${bookingInfo.from}",
+                                              style: textTheme.headline1!
+                                                  .copyWith(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 5),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '',
+                                                style: textTheme.headline1!
+                                                    .copyWith(fontSize: 15),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                "Airline : ${bookingInfo.airline}",
+                                                style: textTheme.headline1!
+                                                    .copyWith(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                width: w * 0.23,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                    color: ctrl
+                                                            .flightStatusCodeColors[
+                                                        bookingInfo
+                                                                .flightStatusCode!
+                                                                .toInt() -
+                                                            1],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4)),
+                                                child: Center(
+                                                  child: Text(
+                                                    "${bookingInfo.flightStatus}",
+                                                    style: textTheme.headline1!
+                                                        .copyWith(fontSize: 12),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                )
-                              ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ));
-            },
+                          ));
+                    },
+                  ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Future<void> signOut() async{
+  Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
 }

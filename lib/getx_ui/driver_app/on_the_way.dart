@@ -1,7 +1,63 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class OneTheWayPage extends StatelessWidget {
-  const OneTheWayPage({Key? key}) : super(key: key);
+class OneTheWayPage extends StatefulWidget {
+  final int index;
+
+  const OneTheWayPage({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  State<OneTheWayPage> createState() => _OneTheWayPageState();
+}
+
+late TextEditingController adultTextController;
+late TextEditingController kidsTextController;
+late TextEditingController carryBagsController;
+late TextEditingController suitCaseController;
+
+validateOnTheWay() {
+  if (adultTextController.text.isNotEmpty &&
+      kidsTextController.text.isNotEmpty &&
+      carryBagsController.text.isNotEmpty &&
+      suitCaseController.text.isNotEmpty) {
+    return true;
+  } else {
+    Fluttertoast.showToast(
+        msg: 'Please enter all the fields',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.SNACKBAR,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0);
+    return false;
+  }
+}
+
+class _OneTheWayPageState extends State<OneTheWayPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    adultTextController = TextEditingController();
+    kidsTextController = TextEditingController();
+    carryBagsController = TextEditingController();
+    suitCaseController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    adultTextController.dispose();
+    kidsTextController.dispose();
+    carryBagsController.dispose();
+    suitCaseController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,12 +225,16 @@ class OneTheWayPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     enterQuantity(w, enabledBorder, focusedBorder, errorBorder,
+                        adultTextController,
                         quantity: 4),
                     enterQuantity(w, enabledBorder, focusedBorder, errorBorder,
+                        kidsTextController,
                         quantity: 4),
                     enterQuantity(w, enabledBorder, focusedBorder, errorBorder,
+                        carryBagsController,
                         quantity: 6),
                     enterQuantity(w, enabledBorder, focusedBorder, errorBorder,
+                        suitCaseController,
                         quantity: 4)
                   ],
                 )
@@ -186,8 +246,12 @@ class OneTheWayPage extends StatelessWidget {
     );
   }
 
-  Widget enterQuantity(double w, OutlineInputBorder enabledBorder,
-      OutlineInputBorder focusedBorder, OutlineInputBorder errorBorder,
+  Widget enterQuantity(
+      double w,
+      OutlineInputBorder enabledBorder,
+      OutlineInputBorder focusedBorder,
+      OutlineInputBorder errorBorder,
+      TextEditingController controller,
       {required quantity}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0, right: 8),
@@ -197,6 +261,7 @@ class OneTheWayPage extends StatelessWidget {
             height: 25,
             width: w * 0.2,
             child: TextField(
+              controller: controller,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.end,
               decoration: InputDecoration(

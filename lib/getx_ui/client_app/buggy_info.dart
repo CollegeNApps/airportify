@@ -2,7 +2,6 @@ import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -585,11 +584,13 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     if (timePicked != null) {
       setState(() {
         if (timePicked.hour > 12) {
-          time =
-              "${timePicked.hour - 12}:${timePicked.minute} ${timePicked.period.name}";
+          time = timePicked.minute < 10
+              ? "${timePicked.hour - 12}:0${timePicked.minute} ${timePicked.period.name}"
+              : "${timePicked.hour - 12}:${timePicked.minute} ${timePicked.period.name}";
         } else {
-          time =
-              "${timePicked.hour}:${timePicked.minute} ${timePicked.period.name}";
+          time = timePicked.minute < 10
+              ? "${timePicked.hour - 12}:0${timePicked.minute} ${timePicked.period.name}"
+              : "${timePicked.hour}:${timePicked.minute} ${timePicked.period.name}";
         }
       });
       print("$date \n Time: $time");
@@ -806,7 +807,8 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'orderedBy':
                                 AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
-                            'suitcases': 0
+                            'suitcases': 0,
+                            "gateNo": f.gateNo
                           });
                         } else {
                           await FirebaseFirestore.instance
@@ -827,7 +829,8 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'orderedBy':
                                 AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
-                            'suitcases': int.parse(suitcaseController.text)
+                            'suitcases': int.parse(suitcaseController.text),
+                            "gateNo": f.gateNo
                           });
                         }
 

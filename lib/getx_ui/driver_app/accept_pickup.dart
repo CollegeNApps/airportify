@@ -1,13 +1,24 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:airportify/models/user/bookings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/firebase_controller.dart';
 
 class AcceptPickup extends StatelessWidget {
-  const AcceptPickup({Key? key}) : super(key: key);
+  final int index;
+  AcceptPickup({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+  final FirebaseController fb = Get.find();
 
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
     var textTheme = Theme.of(context).textTheme;
+    final BookingInfo bookingInfo = fb.bookings[index];
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Padding(
@@ -29,7 +40,8 @@ class AcceptPickup extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Image.asset("images/terminal.png"),
-                  const Positioned(top: 60, child: Text("\$TERMINAL")),
+                  Positioned(
+                      top: 60, child: Text("TERMINAL: ${bookingInfo.gateNo}")),
                 ],
               ),
             ),
@@ -66,8 +78,10 @@ class AcceptPickup extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "\$airline \$name",
-                          // flight.airline.toString() + ' ' + flight.name.toString(),
+                          // "\$airline \$name",
+                          bookingInfo.airline.toString() +
+                              ' ' +
+                              bookingInfo.flightName.toString(),
                           style: textTheme.headline1!.copyWith(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -76,16 +90,15 @@ class AcceptPickup extends StatelessWidget {
                         ),
                         Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              //uncomment the below lines while integration
-                              // color: fb.flightStatusCodeColors[
-                              //     flight.statusCode!.toInt() - 1]
-                            ),
+                                borderRadius: BorderRadius.circular(4),
+                                //uncomment the below lines while integration
+                                color: fb.flightStatusCodeColors[
+                                    bookingInfo.flightStatusCode!.toInt() - 1]),
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Text(
-                                "\${flight.status}",
+                                "${bookingInfo.flightStatus}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline1!
@@ -108,7 +121,7 @@ class AcceptPickup extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Arrival Time: \${flight.at}",
+                                  "Arrival Time: ${bookingInfo.at}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -116,7 +129,7 @@ class AcceptPickup extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Text(
-                                  "Airline: \${flight.airline}",
+                                  "Airline: ${bookingInfo.airline}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -127,7 +140,7 @@ class AcceptPickup extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
-                                  "From: \${flight.from}",
+                                  "From: ${bookingInfo.from}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -139,7 +152,7 @@ class AcceptPickup extends StatelessWidget {
                                 SizedBox(
                                   width: w * 0.42,
                                   child: Text(
-                                    "Capacity : \${flight.capacity}",
+                                    "Capacity : ${bookingInfo.capacity}",
                                     style: textTheme.headline1!
                                         .copyWith(fontSize: 14),
                                     overflow: TextOverflow.ellipsis,
@@ -188,8 +201,10 @@ class AcceptPickup extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "Order Id : \$id",
-                          // flight.airline.toString() + ' ' + flight.name.toString(),
+                          // "Order Id : $id",
+                          bookingInfo.airline.toString() +
+                              ' ' +
+                              bookingInfo.flightName.toString(),
                           style: textTheme.headline1!.copyWith(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
@@ -208,8 +223,27 @@ class AcceptPickup extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Ordered By: ",
+                                      style: textTheme.headline1!
+                                          .copyWith(fontSize: 14),
+                                    ),
+                                    Text(
+                                      "${bookingInfo.orderedBy}",
+                                      style: textTheme.headline1!.copyWith(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
                                 Text(
-                                  "Ordered By: \${Orderby}",
+                                  "No. of adults: ${bookingInfo.adults}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -217,15 +251,7 @@ class AcceptPickup extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Text(
-                                  "No. of adults: \${nos}",
-                                  style: textTheme.headline1!
-                                      .copyWith(fontSize: 14),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "No. of carrybags: \${nos}",
+                                  "No. of carrybags: ${bookingInfo.carryBags}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -236,7 +262,7 @@ class AcceptPickup extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
-                                  "PickUp Time: \${time}",
+                                  "",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -244,7 +270,7 @@ class AcceptPickup extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Text(
-                                  "No. of kids: \${kids}",
+                                  "No. of kids: ${bookingInfo.kids}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
@@ -252,13 +278,20 @@ class AcceptPickup extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Text(
-                                  "No. of suitcases: \${nos}",
+                                  "No. of suitcases: ${bookingInfo.suitcases}",
                                   style: textTheme.headline1!
                                       .copyWith(fontSize: 14),
                                 ),
                               ],
-                            )
+                            ),
                           ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "PickUp Time: ${bookingInfo.pickupTime}",
+                          style: textTheme.headline1!.copyWith(fontSize: 14),
                         ),
                       ],
                     )

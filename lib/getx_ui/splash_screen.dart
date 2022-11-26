@@ -1,8 +1,5 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,23 +12,23 @@ class SplashScreen extends StatelessWidget {
     final s = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset(
-            'images/lottie/44383-multi-a.json',
-            fit: BoxFit.cover,
-          ),
-          Text("Airportify",style: Theme.of(context).textTheme.caption!.copyWith(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 30
-          ),)
-
-
-        ],
-      )
-    );
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'images/lottie/44383-multi-a.json',
+              repeat: false,
+              fit: BoxFit.cover,
+            ),
+            Text(
+              "Airportify",
+              style: Theme.of(context).textTheme.caption!.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            )
+          ],
+        ));
   }
 }
