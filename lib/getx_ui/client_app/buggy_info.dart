@@ -1,5 +1,7 @@
+import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -102,6 +104,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
           ),
         ),
       ),
+      // backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           dateTimeNode.unfocus();
@@ -622,8 +625,11 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
           return Container(
             width: w,
             height: h,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(15)),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15))),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -778,7 +784,54 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                   const Spacer(),
                   Center(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        FlightInfo f = widget.flight;
+
+                        if (serviceType == 'Buggy') {
+                          await FirebaseFirestore.instance
+                              .collection('bookings')
+                              .doc()
+                              .set({
+                            'serviceType': serviceType,
+                            'adults': int.parse(adultController.text),
+                            'airline': f.airline,
+                            'at': f.at,
+                            'capacity': f.capacity,
+                            'carrybags': 0,
+                            'flightName': f.name,
+                            'flightStatus': f.status,
+                            'flightStatusCode': f.statusCode,
+                            'from': f.from,
+                            'kids': int.parse(kidsController.text),
+                            'orderedBy':
+                                AuthController.firebaseUser.username.toString(),
+                            'pickUpTime': dateTimeController.text,
+                            'suitcases': 0
+                          });
+                        } else {
+                          await FirebaseFirestore.instance
+                              .collection('bookings')
+                              .doc()
+                              .set({
+                            'serviceType': serviceType,
+                            'adults': 0,
+                            'airline': f.airline,
+                            'at': f.at,
+                            'capacity': f.capacity,
+                            'carrybags': int.parse(carryBagController.text),
+                            'flightName': f.name,
+                            'flightStatus': f.status,
+                            'flightStatusCode': f.statusCode,
+                            'from': f.from,
+                            'kids': 0,
+                            'orderedBy':
+                                AuthController.firebaseUser.username.toString(),
+                            'pickUpTime': dateTimeController.text,
+                            'suitcases': int.parse(suitcaseController.text)
+                          });
+                        }
+
+                        print("Booking Upload complete");
                         Get.to(() => const ConfirmationScreen());
                       },
                       child: Container(

@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../controllers/auth_controller.dart';
-import 'client_app/client_home.dart';
+import 'client_app/home_screen.dart';
 
 class PhoneLoginScreen extends StatelessWidget {
   PhoneLoginScreen({Key? key}) : super(key: key);
@@ -243,12 +243,10 @@ class PhoneLoginScreen extends StatelessWidget {
                                       if (_phoneNoController.text ==
                                               '1234567890' &&
                                           _usernameController.text == '12345') {
-                                        await FirebaseAuth.instance
-                                            .signInAnonymously();
-                                        Get.to(() => ClientHomeScreen());
+                                        await FirebaseAuth.instance.signInAnonymously();
+                                        Get.to(() => HomeScreen());
                                       } else {
-                                        AuthController.username =
-                                            _usernameController.text;
+                                        AuthController.username = _usernameController.text;
                                         Get.offAll(() => OTPScreen(
                                               phoneNumber:
                                                   _phoneNoController.text,

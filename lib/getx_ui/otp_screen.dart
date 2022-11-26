@@ -1,5 +1,5 @@
 import 'package:airportify/controllers/firebase_controller.dart';
-import 'package:airportify/getx_ui/client_app/client_home.dart';
+import 'package:airportify/getx_ui/driver_app/driver_home.dart';
 import 'package:airportify/getx_ui/phone_login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/auth_controller.dart';
+import 'client_app/home_screen.dart';
 import 'onboarding_screens.dart';
 
 class OTPScreen extends StatefulWidget {
@@ -29,6 +31,9 @@ class _OTPScreenState extends State<OTPScreen> {
 
   ///For phone verification
   String _verificationCode = '';
+
+  bool driverAccess = false;
+  // bool driverExists = false;
 
   @override
   void initState() {
@@ -128,31 +133,45 @@ class _OTPScreenState extends State<OTPScreen> {
                 controller: _pinPutController,
                 onCompleted: (String pin) async {
                   try {
-                    await FirebaseAuth.instance
-                        .signInWithCredential(PhoneAuthProvider.credential(
-                            verificationId: _verificationCode, smsCode: pin))
+                    await FirebaseAuth.instance.signInWithCredential(PhoneAuthProvider.credential(
+                        verificationId: _verificationCode, smsCode: pin))
                         .then((value) async {
                       if (value.user != null) {
                         print('User Logged in Successfully via pinPut');
 
-                        ///Checking if the user(phoneNumber) already exists
-                        ///If yes: Then we direct the user to the home screen
-                        ///Else : We proceed to the on boarding section
+                        ///Driver creation
 
-                        var userExists = await authController
-                            .checkUserExistence2(widget.phoneNumber);
-                        if (userExists == false) {
-                          createUserAccount(value.user!.phoneNumber.toString(),
-                              value.user!.uid);
+                        ///Check if driver has access
+                        bool driverHasAccess = await fbController.checkDriverAccess(widget.phoneNumber);
+
+                        if(driverHasAccess){
+                          AuthController.driverExists2  = true;
+                          await setSharedPreference(true);
+                          bool driverDoesExist = await authController.checkDriverExistence(widget.phoneNumber);
+                          if( driverDoesExist == false){
+                            createDriverAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+                          }
+
+                          AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(value.user!);
+                          Get.to(()=>const DriverHomeScreen());
                         }
 
-                        AuthController.firebaseUser =
-                            await FirebaseController.fetchUserInfo(value.user!);
-                        Get.to(() => ClientHomeScreen());
-                      } else {
-                        Get.to(() => OnBoardingScreens());
-                      }
-                    });
+                        if(AuthController.driverExists2 ==false){
+                          /// User Creation
+                          await setSharedPreference(false);
+                          var userExists = await authController.checkUserExistence2(widget.phoneNumber);
+                          if (userExists == false) {
+                            createUserAccount(value.user!.phoneNumber.toString(), value.user!.uid);
+                          }
+
+                          AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
+                          Get.to(() => HomeScreen());
+                        } else {
+                          Get.to(() => const OnBoardingScreens());
+                        }
+
+
+                      }});
                   } catch (e) {
                     FocusScope.of(context).unfocus();
                     Fluttertoast.showToast(
@@ -239,12 +258,12 @@ class _OTPScreenState extends State<OTPScreen> {
           await FirebaseAuth.instance
               .signInWithCredential(credentials)
               .then((value) async {
-            if (value.user != null) {
-              // createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
-              Get.to(() => ClientHomeScreen());
-            } else {
-              Get.to(() => OnBoardingScreens());
-            }
+            // if (value.user != null) {
+            //   // createUserAccount(value.user!.phoneNumber.toString(),value.user!.uid);
+            //   Get.to(() => HomeScreen());
+            // } else {
+            //   Get.to(() => OnBoardingScreens());
+            // }
           });
         },
         verificationFailed: (FirebaseException e) {
@@ -278,4 +297,22 @@ class _OTPScreenState extends State<OTPScreen> {
     });
     print("Created account");
   }
+  
+  
+  createDriverAccount(String phoneNo,String uid){
+    print("Entered Creating Driver account function");
+    FirebaseFirestore.instance.collection('drivers').doc().set({
+      'phoneNo':phoneNo.substring(3),
+      'id': uid,
+      'name':AuthController.username
+    });
+  }
+
+  Future<void> setSharedPreference(bool existence) async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('driver', existence);
+  }
+  
+  
+  
 }

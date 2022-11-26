@@ -1,6 +1,8 @@
 import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/getx_ui/client_app/flight_info.dart';
 import 'package:airportify/getx_ui/driver_app/driver_status.dart';
+import 'package:airportify/getx_ui/profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
@@ -44,7 +46,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     var size = MediaQuery.of(context).size;
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    final user = AuthController.firebaseUser;
+    final user = AuthController.firebaseDriver;
 
     return Scaffold(
       body: NestedScrollView(
@@ -57,7 +59,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               automaticallyImplyLeading: false,
               // centerTitle: true,
               title: Text(
-                "Hi ${user.username}",
+                "Hi ${user.name}",
                 style: textTheme.headline1!
                     .copyWith(color: Colors.black, fontWeight: FontWeight.w500),
               ),
@@ -67,7 +69,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     icon: const Icon(Icons.notifications_outlined,
                         color: Colors.black)),
                 IconButton(
-                    onPressed: () => null,
+                    onPressed: () => Get.to(()=> ProfileScreen(name: user.name!)),
                     icon:
                         const Icon(Icons.account_circle, color: Colors.black)),
               ],
@@ -283,5 +285,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> signOut() async{
+    await FirebaseAuth.instance.signOut();
   }
 }

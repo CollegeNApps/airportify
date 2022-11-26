@@ -1,7 +1,8 @@
-import 'package:airportify/getx_ui/client_app/client_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+
+import 'home_screen.dart';
 
 class ConfirmationScreen extends StatelessWidget {
   const ConfirmationScreen({Key? key}) : super(key: key);
@@ -39,7 +40,7 @@ class ConfirmationScreen extends StatelessWidget {
           const Spacer(),
           Center(
             child: InkWell(
-              onTap: () => Get.offAll(() => ClientHomeScreen()),
+              onTap: () => Get.offAll(() => HomeScreen()),
               child: Container(
                   width: w * 0.5,
                   height: 35,

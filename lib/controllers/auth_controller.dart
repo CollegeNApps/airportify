@@ -1,14 +1,18 @@
 import 'dart:async';
 
 import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/getx_ui/client_app/home_screen.dart';
+import 'package:airportify/getx_ui/driver_app/driver_home.dart';
 import 'package:airportify/models/user/user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../getx_ui/client_app/client_home.dart';
+
 import '../getx_ui/phone_login_screen.dart';
+import '../models/drivers/drivers.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -17,6 +21,10 @@ class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   static UserDetails firebaseUser = UserDetails();
+  static DriverDetails firebaseDriver = DriverDetails();
+
+  RxBool driverExists = false.obs;
+  static bool driverExists2 = false;
 
   late StreamSubscription subscription;
   final _hasInternet = false.obs;
@@ -53,13 +61,35 @@ class AuthController extends GetxController {
   }
 
   _initializeApp(User? user) async {
+    final prefs = await SharedPreferences.getInstance();
     if (user == null) {
       print("Go to login page");
       Get.offAll(() => PhoneLoginScreen());
-    } else {
+    }
+
+    else {
       print("Go to home page");
-      firebaseUser = await FirebaseController.fetchUserInfo(user);
-      Get.off(() => ClientHomeScreen());
+
+      Future.delayed(const Duration(milliseconds: 500),()async{
+        bool? screenRouteBool = prefs.getBool('driver');
+        print("Driver Exists Status :$screenRouteBool");
+        if(screenRouteBool==false){
+          AuthController.firebaseUser = await FirebaseController.fetchUserInfo(user);
+          Get.off(()=>HomeScreen());
+        }else{
+          AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(user);
+          Get.off(()=>const DriverHomeScreen());
+        }
+      });
+
+      // Future.delayed(const Duration(seconds: 1),(){
+      //   if(driverExists2==false){
+      //     print("Drivers Exists Status : ${driverExists.value}");
+      //     Get.off(() => HomeScreen());
+      //   }else{
+      //     Get.off(()=> const DriverHomeScreen());
+      //   }
+      // });
     }
   }
 
@@ -84,4 +114,20 @@ class AuthController extends GetxController {
     bool existenceOfUser = res.isNotEmpty;
     return existenceOfUser;
   }
+
+
+  Future<bool> checkDriverExistence(String phoneNumber) async {
+    final res = await FirebaseFirestore.instance
+        .collection("drivers")
+        .where("phoneNo", isEqualTo: phoneNumber)
+        .get()
+        .then((query) {
+      var users = query.docs.map((e) => DriverDetails.fromDocument(e)).toList();
+      return users;
+    });
+    print("result of checkDriverExistence:${res.length}");
+    bool existenceOfUser = res.isNotEmpty;
+    return existenceOfUser;
+  }
+
 }
