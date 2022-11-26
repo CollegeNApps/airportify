@@ -13,22 +13,25 @@ class SplashScreen extends StatelessWidget {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset(
-              'images/lottie/44383-multi-a.json',
-              repeat: false,
-              fit: BoxFit.cover,
-            ),
-            Text(
-              "Airportify",
-              style: Theme.of(context).textTheme.caption!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30),
-            )
-          ],
+        body: SizedBox(
+          width: w,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                'images/lottie/44383-multi-a.json',
+                repeat: false,
+                fit: BoxFit.cover,
+              ),
+              Text(
+                "Airportify",
+                style: Theme.of(context).textTheme.caption!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+              )
+            ],
+          ),
         ));
   }
 }
