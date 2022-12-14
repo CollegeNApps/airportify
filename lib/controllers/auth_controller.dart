@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import '../getx_ui/phone_login_screen.dart';
 import '../models/drivers/drivers.dart';
 
@@ -65,20 +64,20 @@ class AuthController extends GetxController {
     if (user == null) {
       print("Go to login page");
       Get.offAll(() => PhoneLoginScreen());
-    }
-
-    else {
+    } else {
       print("Go to home page");
 
-      Future.delayed(const Duration(milliseconds: 500),()async{
+      Future.delayed(const Duration(milliseconds: 500), () async {
         bool? screenRouteBool = prefs.getBool('driver');
         print("Driver Exists Status :$screenRouteBool");
-        if(screenRouteBool==false){
-          AuthController.firebaseUser = await FirebaseController.fetchUserInfo(user);
-          Get.off(()=>HomeScreen());
-        }else{
-          AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(user);
-          Get.off(()=>const DriverHomeScreen());
+        if (screenRouteBool.isNull) {
+          AuthController.firebaseUser =
+              await FirebaseController.fetchUserInfo(user);
+          Get.off(() => HomeScreen());
+        } else {
+          AuthController.firebaseDriver =
+              await FirebaseController.fetchDriverInfo(user);
+          Get.off(() => const DriverHomeScreen());
         }
       });
 
@@ -115,7 +114,6 @@ class AuthController extends GetxController {
     return existenceOfUser;
   }
 
-
   Future<bool> checkDriverExistence(String phoneNumber) async {
     final res = await FirebaseFirestore.instance
         .collection("drivers")
@@ -129,5 +127,4 @@ class AuthController extends GetxController {
     bool existenceOfUser = res.isNotEmpty;
     return existenceOfUser;
   }
-
 }

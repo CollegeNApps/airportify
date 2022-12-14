@@ -22,6 +22,30 @@
           }
         },
         {
+          "client_id": "191042664285-20qg4tobgqc7jv2mlh5jckltibuaih96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.collegeapps.airportify",
+            "certificate_hash": "b5db54cc8d6376ea1241a5f645d0ad7af56209c5"
+          }
+        },
+        {
+          "client_id": "191042664285-a11ip1f73iiev6jjanp8cnrlb79pd5km.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.collegeapps.airportify",
+            "certificate_hash": "8f9319b2c87360e29f73d4b7747e656fb035c137"
+          }
+        },
+        {
+          "client_id": "191042664285-me7ksjamtbpsb34iosfeuq2u3cf1q14i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.collegeapps.airportify",
+            "certificate_hash": "7c3c24e7990197b1e47e980e76b3a9157e93be0d"
+          }
+        },
+        {
           "client_id": "191042664285-6onoebujaaup39nldj76vl177lapjn8n.apps.googleusercontent.com",
           "client_type": 3
         }

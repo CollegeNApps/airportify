@@ -163,7 +163,7 @@ class _OTPScreenState extends State<OTPScreen> {
                           AuthController.firebaseDriver =
                               await FirebaseController.fetchDriverInfo(
                                   value.user!);
-                          Get.to(() => const DriverHomeScreen());
+                          Get.offAll(() => const DriverHomeScreen());
                         }
 
                         if (AuthController.driverExists2 == false) {
@@ -180,19 +180,19 @@ class _OTPScreenState extends State<OTPScreen> {
                           AuthController.firebaseUser =
                               await FirebaseController.fetchUserInfo(
                                   value.user!);
-                          Get.to(() => HomeScreen());
+                          Get.offAll(() => HomeScreen());
                         } else {
-                          Get.to(() => const DriverHomeScreen());
+                          Get.offAll(() => const DriverHomeScreen());
                         }
                       }
                     });
-                  } catch (e) {
+                  } on Exception catch (e) {
                     FocusScope.of(context).unfocus();
                     Fluttertoast.showToast(
-                        msg: 'Invalid OTP Entered',
+                        msg: 'Invalid OTP Entered : ${e.toString()}',
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.SNACKBAR,
-                        timeInSecForIosWeb: 1,
+                        timeInSecForIosWeb: 5,
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
                         fontSize: 16.0);

@@ -8,13 +8,15 @@ import 'package:get/get.dart';
 
 import 'controllers/auth_controller.dart';
 import 'controllers/firebase_controller.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => {
-        Future.delayed(const Duration(seconds: 3))
-            .then((value) => Get.put(AuthController()))
-      });
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) => {
+            Future.delayed(const Duration(seconds: 3))
+                .then((value) => Get.put(AuthController()))
+          });
   await Firebase.initializeApp();
   runApp(MyApp());
 }
