@@ -103,6 +103,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                         color: Colors.white,
+
+
+                        
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.5),
