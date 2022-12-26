@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/controllers/razorpay_controller.dart';
 import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -18,6 +22,9 @@ class BuggyInfoScreen extends StatefulWidget {
 }
 
 class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
+
+  final RazorpayController razorpayController = Get.put(RazorpayController());
+
   final TextEditingController dateTimeController = TextEditingController();
   final TextEditingController adultController = TextEditingController();
   final TextEditingController kidsController = TextEditingController();
@@ -32,6 +39,8 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
 
   String date = '';
   String time = '';
+
+  int finalAmount = 0;
 
   final FirebaseController fb = Get.find();
 
@@ -835,7 +844,14 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                         }
 
                         print("Booking Upload complete");
-                        Get.to(() => const ConfirmationScreen());
+                        // Get.to(() => const ConfirmationScreen());
+                        razorpayController.openCheckout(
+                            'Booking No : ${Random().nextInt(1000)}',finalAmount ,
+                            FirebaseAuth.instance.currentUser!.phoneNumber.toString(),
+                            'something@gmail.com',
+                            ["Gpay","paytm","PhonePe"],
+                            '7411481997');
+
                       },
                       child: Container(
                         width: w,
@@ -888,9 +904,12 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     int serviceCharge = 20;
 
     if (serviceType == 'Buggy') {
-      int subtotal = (pricePerAdult * int.parse(adultController.text)) +
-          (pricePerKid * int.parse(kidsController.text));
+      int subtotal = (pricePerAdult * int.parse(adultController.text)) + (pricePerKid * int.parse(kidsController.text));
       int overallTotal = subtotal + serviceCharge;
+
+      finalAmount =  overallTotal;
+      print("Buggy Final Amount :$finalAmount");
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -916,9 +935,12 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
         ],
       );
     } else {
-      int subtotal = (pricePerSuitcase * int.parse(suitcaseController.text)) +
-          (pricePerCarryBag * int.parse(carryBagController.text));
+      int subtotal = (pricePerSuitcase * int.parse(suitcaseController.text)) + (pricePerCarryBag * int.parse(carryBagController.text));
       int overallTotal = subtotal + serviceCharge;
+
+      print("Porter final Amount:$finalAmount");
+      finalAmount = overallTotal;
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

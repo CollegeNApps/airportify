@@ -105,7 +105,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                         color: Colors.white,
 
 
-                        
+
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.5),
