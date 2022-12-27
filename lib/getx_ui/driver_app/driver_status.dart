@@ -5,6 +5,7 @@ import 'package:airportify/getx_ui/driver_app/ride_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/firebase_controller.dart';
 import 'widgets/widgets.dart';
 
 class DriverStatus extends StatefulWidget {
@@ -37,6 +38,7 @@ class _DriverStatusState extends State<DriverStatus> {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
     var textTheme = Theme.of(context).textTheme;
+    final FirebaseController fb = Get.find();
     return Scaffold(
       body: SafeArea(
           child: NestedScrollView(
@@ -108,6 +110,8 @@ class _DriverStatusState extends State<DriverStatus> {
               }
 
               if (pageController.page == 2) {
+                String id = fb.bookings[widget.index].id!;
+                fb.deleteDocument(id);
                 Get.offAll(const DriverHomeScreen());
               }
 

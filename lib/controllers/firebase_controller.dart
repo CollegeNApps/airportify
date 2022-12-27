@@ -39,6 +39,10 @@ class FirebaseController extends GetxController {
     _bookings.bindStream(connectBookingStream());
   }
 
+  deleteDocument(String id) {
+    FirebaseFirestore.instance.collection('bookings').doc(id).delete();
+  }
+
   Stream<List<FlightInfo>> connectFlightStream() {
     var result = FirebaseFirestore.instance
         .collection('flights')

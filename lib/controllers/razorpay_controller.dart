@@ -1,14 +1,12 @@
-
+import 'dart:developer';
 
 import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-class RazorpayController extends GetxController{
-
+class RazorpayController extends GetxController {
   late Razorpay _razorpay;
   String? paymentId;
-
 
   @override
   void onInit() {
@@ -18,32 +16,32 @@ class RazorpayController extends GetxController{
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     paymentId = response.paymentId;
-    print("Payement Successful");
-    Get.to(()=> const ConfirmationScreen());
+    log("Payement Successful");
+
+    Get.to(() => const ConfirmationScreen());
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print("Error message: ${response.message}");
+    log("Error message: ${response.message}");
     Get.snackbar("Payment Failed", "Error message :${response.message}");
-
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Get.snackbar("Activated external Wallet", "Wallet name : ${response.walletName}");
+    Get.snackbar(
+        "Activated external Wallet", "Wallet name : ${response.walletName}");
   }
 
-
-  void openCheckout(String name, int amount,String contact, String email, List<String> wallet,String hostContact) async {
-    print("Amount passed :$amount");
+  void openCheckout(String name, int amount, String contact, String email,
+      List<String> wallet, String hostContact) async {
+    log("Amount passed :$amount");
     var options = {
       // 'key': 'rzp_live_bYaxNTVqnmHDQH',
-      'key':'rzp_test_7uUd0RnbbGsOzd',
-      'amount': amount*100,
+      'key': 'rzp_test_7uUd0RnbbGsOzd',
+      'amount': amount * 100,
       'name': name,
       'description': '',
       'retry': {'enabled': true, 'max_count': 1},
@@ -57,9 +55,7 @@ class RazorpayController extends GetxController{
     try {
       _razorpay.open(options);
     } catch (e) {
-      print('Error: $e');
+      log('Error: $e');
     }
   }
-
-
 }

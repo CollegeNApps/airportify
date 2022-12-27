@@ -6,7 +6,7 @@ class BookingInfo {
   int? kids;
   int? carryBags;
   int? suitcases;
-
+  String? id;
   String? airline;
   String? at;
   String? capacity;
@@ -21,6 +21,7 @@ class BookingInfo {
   BookingInfo(
       {this.serviceType,
       this.adults,
+      this.id,
       this.kids,
       this.carryBags,
       this.suitcases,
@@ -40,6 +41,7 @@ class BookingInfo {
     var d = snapshot.data();
     return BookingInfo(
         adults: d!['adults'],
+        id: snapshot.id,
         serviceType: d['serviceType'],
         kids: d['kids'],
         carryBags: d['carrybags'],

@@ -68,10 +68,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               icon: const Icon(Icons.notifications_outlined,
                   color: Colors.black)),
           IconButton(
-              onPressed: () =>
-                  Get.to(() => ProfileScreen(name: user.name!)),
-              icon:
-              const Icon(Icons.account_circle, color: Colors.black)),
+              onPressed: () => Get.to(() => ProfileScreen(name: user.name!)),
+              icon: const Icon(Icons.account_circle, color: Colors.black)),
         ],
       ),
       body: SafeArea(
@@ -84,13 +82,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 children: [
                   SizedBox(
                     width: w,
-                    height: h*0.4,
+                    height: h * 0.45,
                     child: FutureBuilder(
                       future: _initialiseVideo,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           return AspectRatio(
-                              aspectRatio: videoPlayerController.value.aspectRatio,
+                              aspectRatio:
+                                  videoPlayerController.value.aspectRatio,
                               child: VideoPlayer(videoPlayerController));
                         } else {
                           return Container();
@@ -98,21 +97,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       },
                     ),
                   ),
-
                   Container(
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                         color: Colors.white,
-
-
-
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            offset: const Offset(0,-2),
-                            blurRadius: 4,
-                            spreadRadius: 0
-                          )
+                              color: Colors.black.withOpacity(0.5),
+                              offset: const Offset(0, -2),
+                              blurRadius: 4,
+                              spreadRadius: 0)
                         ],
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(30),
@@ -156,7 +150,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             ? Container(
                 child: Center(
                     child: Text(
-                  "No Bookings orders today!",
+                  "No Bookings today!",
                   style: textTheme.headline1,
                 )),
               )
@@ -229,11 +223,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                         Text(
                                           // "Arrival Time : \$ArrivalTime",
                                           "Arrival Time : ${bookingInfo.at}",
-                                          style: textTheme.headline1!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                          style: textTheme.headline1!.copyWith(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal),
                                         ),
                                         // SizedBox(width: w*0.08,),
                                         const SizedBox(
@@ -242,17 +234,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                         Text(
                                           // "From : \$placeName",
                                           "From : ${bookingInfo.from}",
-                                          style: textTheme.headline1!
-                                              .copyWith(
-                                                  fontSize: 12,
-                                                  fontWeight:
-                                                      FontWeight.normal),
+                                          style: textTheme.headline1!.copyWith(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal),
                                         ),
                                       ],
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 5),
+                                      padding: const EdgeInsets.only(right: 5),
                                       child: Column(
                                         children: [
                                           Text(
@@ -285,8 +274,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                                             .toInt() -
                                                         1],
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        4)),
+                                                    BorderRadius.circular(4)),
                                             child: Center(
                                               child: Text(
                                                 "${bookingInfo.flightStatus}",
