@@ -70,15 +70,18 @@ class AuthController extends GetxController {
       Future.delayed(const Duration(milliseconds: 500), () async {
         bool? screenRouteBool = prefs.getBool('driver');
         print("Driver Exists Status :$screenRouteBool");
-        if (screenRouteBool.isNull) {
-          AuthController.firebaseUser =
-              await FirebaseController.fetchUserInfo(user);
-          Get.off(() => HomeScreen());
-        } else {
-          AuthController.firebaseDriver =
-              await FirebaseController.fetchDriverInfo(user);
-          Get.off(() => const DriverHomeScreen());
+
+        if(!screenRouteBool.isNull){
+          if (screenRouteBool == false) {
+            AuthController.firebaseUser = await FirebaseController.fetchUserInfo(user);
+            Get.off(() => HomeScreen());
+          } else {
+            AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(user);
+            Get.off(() => const DriverHomeScreen());
+          }
         }
+
+
       });
 
       // Future.delayed(const Duration(seconds: 1),(){
