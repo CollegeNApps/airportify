@@ -1,14 +1,20 @@
 
 
 
+import 'package:airportify/controllers/firebase_controller.dart';
+import 'package:airportify/getx_ui/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String name;
-  const ProfileScreen({Key? key,required this.name}) : super(key: key);
+  ProfileScreen({Key? key,required this.name}) : super(key: key);
+
+
+  final FirebaseController firebaseController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +67,41 @@ class ProfileScreen extends StatelessWidget {
               fontSize: 15
           ),),
 
+          SizedBox(height: h*0.02,),
+          InkWell(
+            onTap: () async{
+              final prefs = await SharedPreferences.getInstance();
+              bool? driverAccess = prefs.getBool('driver');
+              var historyList = firebaseController.bookings.where((element) => element.userId == FirebaseAuth.instance.currentUser!.uid).toList();
+              var driverHistoryList = firebaseController.bookings.where((element) => element.driverId == FirebaseAuth.instance.currentUser!.uid).toList();
+              print("Driver Access Bool :$driverAccess");
+              print("Bookings List after Filtering :$historyList");
+              print("Ride List after Filtering :$driverHistoryList");
+
+              if(driverAccess==true){
+                Get.to(()=>History(driverAccess: driverAccess!,history: driverHistoryList,));
+              }else{
+                Get.to(()=>History(driverAccess: driverAccess!,history: historyList,));
+              }
+            },
+            child: Container(
+              width: w * 0.5,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                  child: Text(
+                    "Booking History",
+                    style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )),
+            ),
+          ),
           SizedBox(height: h*0.1,),
           InkWell(
             onTap: () async{
@@ -84,6 +125,7 @@ class ProfileScreen extends StatelessWidget {
                   )),
             ),
           ),
+
         ],
       ),
     );

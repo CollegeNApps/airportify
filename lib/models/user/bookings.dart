@@ -17,6 +17,8 @@ class BookingInfo {
   String? orderedBy;
   String? pickupTime;
   String? gateNo;
+  String? userId;
+  String? driverId;
 
   BookingInfo(
       {this.serviceType,
@@ -34,7 +36,9 @@ class BookingInfo {
       this.from,
       this.orderedBy,
       this.pickupTime,
-      this.gateNo});
+      this.gateNo,
+      this.userId,
+      this.driverId});
 
   factory BookingInfo.fromDocument(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -55,6 +59,8 @@ class BookingInfo {
         from: d['from'],
         orderedBy: d['orderedBy'],
         pickupTime: d['pickUpTime'],
-        gateNo: d["gateNo"]);
+        gateNo: d["gateNo"],
+        userId: d['userId'],
+        driverId: d['driverId']);
   }
 }

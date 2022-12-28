@@ -212,11 +212,7 @@ class HomeScreen extends StatelessWidget {
                                                       width: w * 0.23,
                                                       height: 20,
                                                       decoration: BoxDecoration(
-                                                          color: ctrl
-                                                                  .flightStatusCodeColors[
-                                                              flight.statusCode!
-                                                                      .toInt() -
-                                                                  1],
+                                                          color: ctrl.flightStatusCodeColors[flight.statusCode!.toInt() - 1],
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(4)),

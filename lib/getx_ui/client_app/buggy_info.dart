@@ -808,16 +808,17 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'at': f.at,
                             'capacity': f.capacity,
                             'carrybags': 0,
+                            'driverId':'',
                             'flightName': f.name,
                             'flightStatus': f.status,
                             'flightStatusCode': f.statusCode,
                             'from': f.from,
                             'kids': int.parse(kidsController.text),
-                            'orderedBy':
-                                AuthController.firebaseUser.username.toString(),
+                            'orderedBy': AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
                             'suitcases': 0,
-                            "gateNo": f.gateNo
+                            "gateNo": f.gateNo,
+                            "userId":FirebaseAuth.instance.currentUser!.uid
                           });
                         } else {
                           await FirebaseFirestore.instance
@@ -830,16 +831,17 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'at': f.at,
                             'capacity': f.capacity,
                             'carrybags': int.parse(carryBagController.text),
+                            'driverId':'',
                             'flightName': f.name,
                             'flightStatus': f.status,
                             'flightStatusCode': f.statusCode,
                             'from': f.from,
                             'kids': 0,
-                            'orderedBy':
-                                AuthController.firebaseUser.username.toString(),
+                            'orderedBy': AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
                             'suitcases': int.parse(suitcaseController.text),
-                            "gateNo": f.gateNo
+                            "gateNo": f.gateNo,
+                            "userId":FirebaseAuth.instance.currentUser!.uid
                           });
                         }
 
