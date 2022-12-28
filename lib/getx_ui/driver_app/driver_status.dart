@@ -2,6 +2,8 @@ import 'package:airportify/getx_ui/driver_app/accept_pickup.dart';
 import 'package:airportify/getx_ui/driver_app/driver_home.dart';
 import 'package:airportify/getx_ui/driver_app/on_the_way.dart';
 import 'package:airportify/getx_ui/driver_app/ride_complete.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -104,14 +106,19 @@ class _DriverStatusState extends State<DriverStatus> {
           color: Colors.transparent,
           child: InkWell(
             splashColor: Colors.amber,
-            onTap: () {
+            onTap: () async {
               if (pageController.page == 1) {
                 if (!validateOnTheWay()) return;
               }
 
               if (pageController.page == 2) {
                 String id = fb.bookings[widget.index].id!;
-                fb.deleteDocument(id);
+                await FirebaseFirestore.instance
+                    .collection('bookings')
+                    .doc(id)
+                    .update({
+                  'driverId': FirebaseAuth.instance.currentUser!.uid,
+                });
                 Get.offAll(const DriverHomeScreen());
               }
 

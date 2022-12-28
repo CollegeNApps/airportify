@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/client_app/home_screen.dart';
@@ -62,31 +63,31 @@ class AuthController extends GetxController {
   _initializeApp(User? user) async {
     final prefs = await SharedPreferences.getInstance();
     if (user == null) {
-      print("Go to login page");
+      log("Go to login page");
       Get.offAll(() => PhoneLoginScreen());
     } else {
-      print("Go to home page");
+      log("Go to home page");
 
       Future.delayed(const Duration(milliseconds: 500), () async {
         bool? screenRouteBool = prefs.getBool('driver');
-        print("Driver Exists Status :$screenRouteBool");
+        log("Driver Exists Status :$screenRouteBool");
 
-        if(!screenRouteBool.isNull){
+        if (!screenRouteBool.isNull) {
           if (screenRouteBool == false) {
-            AuthController.firebaseUser = await FirebaseController.fetchUserInfo(user);
+            AuthController.firebaseUser =
+                await FirebaseController.fetchUserInfo(user);
             Get.off(() => HomeScreen());
           } else {
-            AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(user);
+            AuthController.firebaseDriver =
+                await FirebaseController.fetchDriverInfo(user);
             Get.off(() => const DriverHomeScreen());
           }
         }
-
-
       });
 
       // Future.delayed(const Duration(seconds: 1),(){
       //   if(driverExists2==false){
-      //     print("Drivers Exists Status : ${driverExists.value}");
+      //     log("Drivers Exists Status : ${driverExists.value}");
       //     Get.off(() => HomeScreen());
       //   }else{
       //     Get.off(()=> const DriverHomeScreen());
@@ -112,7 +113,7 @@ class AuthController extends GetxController {
       var users = query.docs.map((e) => UserDetails.fromDocument(e)).toList();
       return users;
     });
-    print("result of checkUserExistence2:${res.length}");
+    log("result of checkUserExistence2:${res.length}");
     bool existenceOfUser = res.isNotEmpty;
     return existenceOfUser;
   }
@@ -126,7 +127,7 @@ class AuthController extends GetxController {
       var users = query.docs.map((e) => DriverDetails.fromDocument(e)).toList();
       return users;
     });
-    print("result of checkDriverExistence:${res.length}");
+    log("result of checkDriverExistence:${res.length}");
     bool existenceOfUser = res.isNotEmpty;
     return existenceOfUser;
   }

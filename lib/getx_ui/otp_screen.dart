@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/getx_ui/driver_app/driver_home.dart';
 import 'package:airportify/getx_ui/phone_login_screen.dart';
@@ -141,36 +143,47 @@ class _OTPScreenState extends State<OTPScreen> {
                             verificationId: _verificationCode, smsCode: pin))
                         .then((value) async {
                       if (value.user != null) {
-                        print('User Logged in Successfully via pinPut');
+                        log('User Logged in Successfully via pinPut');
 
                         ///Driver creation
 
                         ///Check if driver has access
                         // bool driverHasAccess = await fbController.checkDriverAccess(widget.phoneNumber);
 
-                        AuthController.driverExists2 = await fbController.checkDriverAccess(widget.phoneNumber);
+                        AuthController.driverExists2 = await fbController
+                            .checkDriverAccess(widget.phoneNumber);
 
                         if (AuthController.driverExists2 == true) {
                           // AuthController.driverExists2 = true;
                           await fbController.setSharedPreference(true);
-                          bool driverDoesExist = await authController.checkDriverExistence(widget.phoneNumber);
+                          bool driverDoesExist = await authController
+                              .checkDriverExistence(widget.phoneNumber);
                           if (driverDoesExist == false) {
-                            fbController.createDriverAccount(value.user!.phoneNumber.toString(), value.user!.uid);
+                            fbController.createDriverAccount(
+                                value.user!.phoneNumber.toString(),
+                                value.user!.uid);
                           }
 
-                          AuthController.firebaseDriver = await FirebaseController.fetchDriverInfo(value.user!);
+                          AuthController.firebaseDriver =
+                              await FirebaseController.fetchDriverInfo(
+                                  value.user!);
                           Get.offAll(() => const DriverHomeScreen());
                         }
 
                         if (AuthController.driverExists2 == false) {
                           /// User Creation
                           await fbController.setSharedPreference(false);
-                          var userExists = await authController.checkUserExistence2(widget.phoneNumber);
+                          var userExists = await authController
+                              .checkUserExistence2(widget.phoneNumber);
                           if (userExists == false) {
-                            fbController.createUserAccount(value.user!.phoneNumber.toString(), value.user!.uid);
+                            fbController.createUserAccount(
+                                value.user!.phoneNumber.toString(),
+                                value.user!.uid);
                           }
 
-                          AuthController.firebaseUser = await FirebaseController.fetchUserInfo(value.user!);
+                          AuthController.firebaseUser =
+                              await FirebaseController.fetchUserInfo(
+                                  value.user!);
                           Get.offAll(() => HomeScreen());
                         }
                       }

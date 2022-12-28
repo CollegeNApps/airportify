@@ -83,7 +83,7 @@ class FirebaseController extends GetxController {
     await db.open();
     inspect(db);
     final phoneNos = await db.collection('Airportify').find().toList();
-    print("Phone numbers via Mongo db :${phoneNos[0]['users']}");
+    log("Phone numbers via Mongo db :${phoneNos[0]['users']}");
 
     userPhoneNos = phoneNos[0]['users'];
   }
@@ -97,7 +97,7 @@ class FirebaseController extends GetxController {
       var access = res[0].drivers!.contains(phoneNumber);
       return access;
     });
-    print("Driver Access :$result");
+    log("Driver Access :$result");
     return result;
   }
 
@@ -114,17 +114,17 @@ class FirebaseController extends GetxController {
   }
 
   createUserAccount(String phoneNo, String uid) {
-    print("Entered Creating account function");
+    log("Entered Creating account function");
     FirebaseFirestore.instance.collection('users').doc().set({
       'username': AuthController.username,
       'phoneNo': phoneNo.substring(3),
       'uid': uid
     });
-    print("Created account");
+    log("Created account");
   }
 
   createDriverAccount(String phoneNo, String uid) {
-    print("Entered Creating Driver account function");
+    log("Entered Creating Driver account function");
     FirebaseFirestore.instance.collection('drivers').doc().set({
       'phoneNo': phoneNo.substring(3),
       'id': uid,

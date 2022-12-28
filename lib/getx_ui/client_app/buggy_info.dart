@@ -1,9 +1,9 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as m;
 
 import 'package:airportify/controllers/auth_controller.dart';
 import 'package:airportify/controllers/firebase_controller.dart';
 import 'package:airportify/controllers/razorpay_controller.dart';
-import 'package:airportify/getx_ui/client_app/confirmation_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class BuggyInfoScreen extends StatefulWidget {
 }
 
 class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
-
   final RazorpayController razorpayController = Get.put(RazorpayController());
 
   final TextEditingController dateTimeController = TextEditingController();
@@ -602,7 +601,7 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
               : "${timePicked.hour}:${timePicked.minute} ${timePicked.period.name}";
         }
       });
-      print("$date \n Time: $time");
+      log("$date \n Time: $time");
       dateTimeController.text = " $date  @$time";
       dateTimeNode.unfocus();
     }
@@ -808,17 +807,18 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'at': f.at,
                             'capacity': f.capacity,
                             'carrybags': 0,
-                            'driverId':'',
+                            'driverId': '',
                             'flightName': f.name,
                             'flightStatus': f.status,
                             'flightStatusCode': f.statusCode,
                             'from': f.from,
                             'kids': int.parse(kidsController.text),
-                            'orderedBy': AuthController.firebaseUser.username.toString(),
+                            'orderedBy':
+                                AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
                             'suitcases': 0,
                             "gateNo": f.gateNo,
-                            "userId":FirebaseAuth.instance.currentUser!.uid
+                            "userId": FirebaseAuth.instance.currentUser!.uid
                           });
                         } else {
                           await FirebaseFirestore.instance
@@ -831,29 +831,31 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
                             'at': f.at,
                             'capacity': f.capacity,
                             'carrybags': int.parse(carryBagController.text),
-                            'driverId':'',
+                            'driverId': '',
                             'flightName': f.name,
                             'flightStatus': f.status,
                             'flightStatusCode': f.statusCode,
                             'from': f.from,
                             'kids': 0,
-                            'orderedBy': AuthController.firebaseUser.username.toString(),
+                            'orderedBy':
+                                AuthController.firebaseUser.username.toString(),
                             'pickUpTime': dateTimeController.text,
                             'suitcases': int.parse(suitcaseController.text),
                             "gateNo": f.gateNo,
-                            "userId":FirebaseAuth.instance.currentUser!.uid
+                            "userId": FirebaseAuth.instance.currentUser!.uid
                           });
                         }
 
-                        print("Booking Upload complete");
+                        log("Booking Upload complete");
                         // Get.to(() => const ConfirmationScreen());
                         razorpayController.openCheckout(
-                            'Booking No : ${Random().nextInt(1000)}',finalAmount ,
-                            FirebaseAuth.instance.currentUser!.phoneNumber.toString(),
+                            'Booking No : ${m.Random().nextInt(1000)}',
+                            finalAmount,
+                            FirebaseAuth.instance.currentUser!.phoneNumber
+                                .toString(),
                             'something@gmail.com',
-                            ["Gpay","paytm","PhonePe"],
+                            ["Gpay", "paytm", "PhonePe"],
                             '7411481997');
-
                       },
                       child: Container(
                         width: w,
@@ -906,11 +908,12 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
     int serviceCharge = 20;
 
     if (serviceType == 'Buggy') {
-      int subtotal = (pricePerAdult * int.parse(adultController.text)) + (pricePerKid * int.parse(kidsController.text));
+      int subtotal = (pricePerAdult * int.parse(adultController.text)) +
+          (pricePerKid * int.parse(kidsController.text));
       int overallTotal = subtotal + serviceCharge;
 
-      finalAmount =  overallTotal;
-      print("Buggy Final Amount :$finalAmount");
+      finalAmount = overallTotal;
+      log("Buggy Final Amount :$finalAmount");
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -937,10 +940,11 @@ class _BuggyInfoScreenState extends State<BuggyInfoScreen> {
         ],
       );
     } else {
-      int subtotal = (pricePerSuitcase * int.parse(suitcaseController.text)) + (pricePerCarryBag * int.parse(carryBagController.text));
+      int subtotal = (pricePerSuitcase * int.parse(suitcaseController.text)) +
+          (pricePerCarryBag * int.parse(carryBagController.text));
       int overallTotal = subtotal + serviceCharge;
 
-      print("Porter final Amount:$finalAmount");
+      log("Porter final Amount:$finalAmount");
       finalAmount = overallTotal;
 
       return Column(

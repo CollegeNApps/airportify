@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:airportify/getx_ui/otp_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -238,15 +240,16 @@ class PhoneLoginScreen extends StatelessWidget {
                                           textColor: Colors.white,
                                           fontSize: 16.0);
                                     } else {
-                                      print(
-                                          "phone no :${_phoneNoController.text}]\nPassword :${_usernameController.text}");
+                                      log("phone no :${_phoneNoController.text}]\nPassword :${_usernameController.text}");
                                       if (_phoneNoController.text ==
                                               '1234567890' &&
                                           _usernameController.text == '12345') {
-                                        await FirebaseAuth.instance.signInAnonymously();
+                                        await FirebaseAuth.instance
+                                            .signInAnonymously();
                                         Get.to(() => HomeScreen());
                                       } else {
-                                        AuthController.username = _usernameController.text;
+                                        AuthController.username =
+                                            _usernameController.text;
                                         Get.offAll(() => OTPScreen(
                                               phoneNumber:
                                                   _phoneNoController.text,
