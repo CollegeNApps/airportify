@@ -5,20 +5,43 @@ import 'package:get/get.dart';
 
 import '../../controllers/firebase_controller.dart';
 
-class AcceptPickup extends StatelessWidget {
+class AcceptPickup extends StatefulWidget {
   final int index;
   AcceptPickup({
     Key? key,
     required this.index,
   }) : super(key: key);
+
+  @override
+  State<AcceptPickup> createState() => _AcceptPickupState();
+}
+
+class _AcceptPickupState extends State<AcceptPickup> {
   final FirebaseController fb = Get.find();
+  double size = 54;
+  Color color = Color.fromARGB(255, 17, 84, 207);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    increaseSize();
+  }
+
+  increaseSize() async {
+    await Future.delayed(Duration(milliseconds: 800));
+    setState(() {
+      size = 14;
+      color = Colors.black;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
     var textTheme = Theme.of(context).textTheme;
-    final BookingInfo bookingInfo = fb.bookings[index];
+    final BookingInfo bookingInfo = fb.bookings[widget.index];
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Padding(
@@ -41,7 +64,17 @@ class AcceptPickup extends StatelessWidget {
                 children: [
                   Image.asset("images/terminal.png"),
                   Positioned(
-                      top: 60, child: Text("TERMINAL: ${bookingInfo.gateNo}")),
+                      top: 60,
+                      child: AnimatedDefaultTextStyle(
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontSize: size, color: color),
+                        duration: Duration(milliseconds: 500),
+                        child: Text(
+                          "TERMINAL: ${bookingInfo.gateNo}",
+                        ),
+                      )),
                 ],
               ),
             ),

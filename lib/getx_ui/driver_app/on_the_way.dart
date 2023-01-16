@@ -21,13 +21,17 @@ late TextEditingController suitCaseController;
 
 validateOnTheWay() {
   if (adultTextController.text.isNotEmpty &&
+      int.parse(adultTextController.text.toString()) <= 4 &&
       kidsTextController.text.isNotEmpty &&
+      int.parse(kidsTextController.text.toString()) <= 4 &&
       carryBagsController.text.isNotEmpty &&
-      suitCaseController.text.isNotEmpty) {
+      int.parse(carryBagsController.text.toString()) <= 6 &&
+      suitCaseController.text.isNotEmpty &&
+      int.parse(suitCaseController.text.toString()) <= 4) {
     return true;
   } else {
     Fluttertoast.showToast(
-        msg: 'Please enter all the fields',
+        msg: 'Please enter proper Details',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.SNACKBAR,
         timeInSecForIosWeb: 1,
@@ -101,77 +105,6 @@ class _OneTheWayPageState extends State<OneTheWayPage> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              // height: 900,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: const [
-                  BoxShadow(
-                      offset: Offset(3, 5),
-                      // spreadRadius: 4,
-                      blurRadius: 3,
-                      color: Colors.grey),
-                ],
-              ),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 16),
-                      child: SizedBox(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text("No. of adults picked up :"),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text("No. Kids picked up : "),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text("No. Carrybags on board :"),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text("No. Suitcases on board:"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: const [
-                                  Text("3/4"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text("3/4"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text("3/4"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text("3/4"),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ]),
-            )
           ],
         ),
       ),
